@@ -10,42 +10,39 @@ function visualize(data) {
 }
 
 function makeCoordinateSystem(data) {
-    var countries = d3.map(data, function(d){return d.country;}).keys();
+    var countries = d3.map(data, function(d) { return d.country; }).keys();
+    var MAX_BUDGET = d3.max(data, function(d) { return +d.budget; });
+    var MIN_YEAR = d3.min(data, function(d) { return (d.title_year)?+d.title_year:3000; });
+    var MAX_YEAR = d3.max(data, function(d) { return +d.title_year; });
+    var MAX_LIKES = d3.max(data, function(d) { return +d.movie_facebook_likes; });
     var w = 500, h = 500;
-    var x = d3.scale.linear().domain([1900, 2017]).range([0, w]); // x: year
-    var y = d3.scale.linear().domain([0, 349000]).range([0, h]); // y: likes
-    var r = d3.scale.linear().domain([0, 800000000]).range([0, 10]); // radius: budget
+    var x = d3.scale.linear().domain([MIN_YEAR, MAX_YEAR]).range([0, w]); // x: year
+    var y = d3.scale.linear().domain([0, MAX_LIKES]).range([0, h]); // y: likes
+    var r = d3.scale.linear().domain([0, MAX_BUDGET]).range([0, 100]); // radius: budget
     var c = d3.scale.ordinal().domain(countries).range(d3.schemeCategory20c); // color: country
+
+    var xAxis = d3.axisBottom().scale(x);
+    var yAxis = d3.axisLeft().scale(y);
     
     var svg = d3.select("body")
         .append("svg")
             .attr("width", w)
-            .attr("height", h);
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom");
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left");
-
-    // obscure:
-    svg.append("g")
-        .attr("class", "axis") // style with css
-        .attr("transform", "translate(0,"+h+")")
-        .call(xAxis);
-    svg.append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(0, 0)")
-        .call("yAxis");
+            .attr("height", h)
+        .append("g")
+            .attr("class", "axis") // style with css
+            .attr("transform", "translate(0,"+h+")")
+            .call(xAxis)
+        .append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(0, 0)")
+            .call(yAxis);
     
-
     svg.selectAll("circle").data(data).enter()
         .append("circle")
-        .attr("cx", function(d) { return x(d.title_year); })
-        .attr("xy", function(d) { return y(d.movie_facebook_likes); })
-        .attr("r", function(d) { return r(d.budget); })
-        .attr("fill", function(d) { return c(d.country); });
+            .attr("cx", function(d) { return x(+d.title_year); })
+            .attr("cy", function(d) { return y(+d.movie_facebook_likes); })
+            .attr("r", function(d) { return r(+d.budget); })
+            .attr("fill", function(d) { return c(d.country); });
     
 }
 
