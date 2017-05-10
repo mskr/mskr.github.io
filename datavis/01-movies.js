@@ -10,40 +10,80 @@ function visualize(data) {
 }
 
 function makeCoordinateSystem(data) {
+    var width = 1000;
+    var height = 500;
+    var margin = {top: 0, right: 0, bottom: 60, left: 40};
+    var svg = d3.select("body")
+        .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var w = width - margin.left - margin.right;
+    var h = height - margin.bottom - margin.top;
+
     var countries = d3.map(data, function(d) { return d.country; }).keys();
-    var MAX_BUDGET = d3.max(data, function(d) { return +d.budget; });
+    //var MAX_BUDGET_US = d3.max(data, function(d) { return (d.country=="USA") ? +d.budget : 0; });
     var MIN_YEAR = d3.min(data, function(d) { return (d.title_year)?+d.title_year:3000; });
     var MAX_YEAR = d3.max(data, function(d) { return +d.title_year; });
     var MAX_LIKES = d3.max(data, function(d) { return +d.movie_facebook_likes; });
-    var w = 500, h = 500;
-    var x = d3.scale.linear().domain([MIN_YEAR, MAX_YEAR]).range([0, w]); // x: year
-    var y = d3.scale.linear().domain([0, MAX_LIKES]).range([0, h]); // y: likes
-    var r = d3.scale.linear().domain([0, MAX_BUDGET]).range([0, 100]); // radius: budget
+    var x = d3.scaleLinear().domain([MIN_YEAR, MAX_YEAR]).range([0, w]); // x: year
+    var y = d3.scaleLinear().domain([MAX_LIKES, 0]).range([0, h]); // y: likes
+    //var r = d3.scale.linear().domain([0, MAX_BUDGET_US]).range([0, 100]); // radius: budget
     var c = d3.scale.ordinal().domain(countries).range(d3.schemeCategory20c); // color: country
 
-    var xAxis = d3.axisBottom().scale(x);
-    var yAxis = d3.axisLeft().scale(y);
+    // country color-code legend
+    svg.append("g")
+        .attr("transform", "translate(0," + (height-5) + ")")
+        .selectAll("circle").data(countries).enter().append("circle")
+            .attr("r", 5)
+            .attr("cx", function(d) { return countries.indexOf(d) * 10; })
+            .attr("fill", function(d) { return c(d); })
+            .append("title") // mouseover tooltip
+                .text(function(d) { return d; });
+
+    // axes
+    var xAxis = d3.axisBottom(x)
+        .tickFormat(d3.format("d")); // decimal format
+    var yAxis = d3.axisLeft(y)
+        .tickFormat(d3.format(".2s")); // 2 rounded digits + SI-unit
+    svg.append("g")
+        .attr("transform", "translate(0," + h + ")")
+        .call(xAxis)
+        .append("text")
+            .text("Year")
+            .attr("transform", "translate(" + w + "," + 30 + ")")
+            .attr("fill", "black")
+            .style("text-anchor", "end")
+            .style("font", "1.5em sans-serif")
+    svg.append("g")
+        .call(yAxis)
+        .append("text")
+            .text("Facebook Likes")
+            .attr("transform", "translate(" + 20 + "," + 0 + ") rotate(-90)")
+            .attr("fill", "black")
+            .style("text-anchor", "end")
+            .style("font", "1.5em sans-serif")
     
-    var svg = d3.select("body")
-        .append("svg")
-            .attr("width", w)
-            .attr("height", h)
-        .append("g")
-            .attr("class", "axis") // style with css
-            .attr("transform", "translate(0,"+h+")")
-            .call(xAxis)
-        .append("g")
-            .attr("class", "axis")
-            .attr("transform", "translate(0, 0)")
-            .call(yAxis);
-    
-    svg.selectAll("circle").data(data).enter()
-        .append("circle")
-            .attr("cx", function(d) { return x(+d.title_year); })
-            .attr("cy", function(d) { return y(+d.movie_facebook_likes); })
-            .attr("r", function(d) { return r(+d.budget); })
-            .attr("fill", function(d) { return c(d.country); });
-    
+    // enter data
+    var point = svg.append("g").selectAll("circle").data(data).enter().append("g")
+        .attr("transform", function(d) { return "translate(" + x(+d.title_year) + "," + y(+d.movie_facebook_likes) + ")";})
+    point.append("circle")
+        .attr("r", function(d) { return 5; })
+        .attr("fill", function(d) { return c(d.country); })
+        .append("title") // mouseover tooltip
+            .text(function(d) { return d.movie_title + "\n" + d.title_year + "\n" + d.country + "\n" + d.movie_facebook_likes; })
+    point.append("text")
+        .text(function(d) {
+            return ((+d.movie_facebook_likes>40000 && +d.title_year<1990)
+                || (+d.movie_facebook_likes>198000)
+                || (+d.movie_facebook_likes>1000 && +d.title_year<1930)
+                || (+d.movie_facebook_likes>100000 && +d.title_year<2000)) 
+                    ? d.movie_title + "(" + d.movie_facebook_likes + " likes)" : "";
+        })
+        .attr("text-anchor", "end")
+        .attr("transform", "translate(-10, 10)")
+        .style("font", ".8em sans-serif")
 }
 
 function makeCirclePacking(data) {
