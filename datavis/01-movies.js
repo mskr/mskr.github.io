@@ -12,7 +12,7 @@ function visualize(data) {
 function makeCoordinateSystem(data) {
     var width = 1000;
     var height = 500;
-    var margin = {top: 0, right: 0, bottom: 60, left: 40};
+    var margin = {top: 0, right: 0, bottom: 40, left: 40};
     var svg = d3.select("body")
         .append("svg")
             .attr("width", width)
@@ -22,25 +22,32 @@ function makeCoordinateSystem(data) {
     var w = width - margin.left - margin.right;
     var h = height - margin.bottom - margin.top;
 
-    var countries = d3.map(data, function(d) { return d.country; }).keys();
+    var countries = d3.map(data, function(d) { return d.country; }).keys(); // apparently sorted by occurences
+    countries.length = 10; // blend away the marginal countries
     //var MAX_BUDGET_US = d3.max(data, function(d) { return (d.country=="USA") ? +d.budget : 0; });
     var MIN_YEAR = d3.min(data, function(d) { return (d.title_year)?+d.title_year:3000; });
     var MAX_YEAR = d3.max(data, function(d) { return +d.title_year; });
     var MAX_LIKES = d3.max(data, function(d) { return +d.movie_facebook_likes; });
-    var x = d3.scaleLinear().domain([MIN_YEAR, MAX_YEAR]).range([0, w]); // x: year
-    var y = d3.scaleLinear().domain([MAX_LIKES, 0]).range([0, h]); // y: likes
-    //var r = d3.scale.linear().domain([0, MAX_BUDGET_US]).range([0, 100]); // radius: budget
-    var c = d3.scale.ordinal().domain(countries).range(d3.schemeCategory20c); // color: country
+    var x = d3.scaleLinear().domain([MIN_YEAR, MAX_YEAR+2]).range([0, w]); // x: year
+    var y = d3.scaleLinear().domain([MAX_LIKES+10000, 0]).range([0, h]); // y: likes
+    //var r = d3.scale.linear().domain([0, MAX_BUDGET_US]).range([0, 100]); // radius: budget (not a good idea)
+    var c = d3.scale.ordinal().domain(countries).range(d3.schemeCategory10); // color: country
 
     // country color-code legend
-    svg.append("g")
-        .attr("transform", "translate(0," + (height-5) + ")")
-        .selectAll("circle").data(countries).enter().append("circle")
-            .attr("r", 5)
-            .attr("cx", function(d) { return countries.indexOf(d) * 10; })
-            .attr("fill", function(d) { return c(d); })
-            .append("title") // mouseover tooltip
-                .text(function(d) { return d; });
+    var legend = svg.append("g")
+        .attr("transform", "translate("+(margin.left+50)+", 10)")
+    var legendpoint = legend.selectAll("circle").data(countries).enter().append("g")
+        .attr("transform", function(d) { return "translate(0, "+countries.indexOf(d) * 20+")"; });
+    legendpoint.append("circle")
+        .attr("r", 5)
+        .attr("fill", function(d) { return c(d); })            
+        .append("title") // mouseover tooltip
+            .text(function(d) { return d; });
+    legendpoint.append("text")
+        .text(function(d) { return d; })
+        .attr("text-anchor", "start")
+        .style("font", ".8em sans-serif")
+        .attr("transform", "translate(10, 5)")
 
     // axes
     var xAxis = d3.axisBottom(x)
@@ -65,17 +72,17 @@ function makeCoordinateSystem(data) {
             .style("text-anchor", "end")
             .style("font", "1.5em sans-serif")
     
-    // enter data
+    // enter data, represented as circles, into document
     var point = svg.append("g").selectAll("circle").data(data).enter().append("g")
         .attr("transform", function(d) { return "translate(" + x(+d.title_year) + "," + y(+d.movie_facebook_likes) + ")";})
     point.append("circle")
         .attr("r", function(d) { return 5; })
         .attr("fill", function(d) { return c(d.country); })
-        .append("title") // mouseover tooltip
+        .append("title") // mouseover tooltip (not visible when statically viewing)
             .text(function(d) { return d.movie_title + "\n" + d.title_year + "\n" + d.country + "\n" + d.movie_facebook_likes; })
     point.append("text")
         .text(function(d) {
-            return ((+d.movie_facebook_likes>40000 && +d.title_year<1990)
+            return ((+d.movie_facebook_likes>40000 && +d.title_year<1990) // when to show the movie title
                 || (+d.movie_facebook_likes>198000)
                 || (+d.movie_facebook_likes>1000 && +d.title_year<1930)
                 || (+d.movie_facebook_likes>100000 && +d.title_year<2000)) 
