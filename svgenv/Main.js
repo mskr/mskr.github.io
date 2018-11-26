@@ -21,7 +21,7 @@ $(document).ready(function() {
 
     masterTL.seek(DAY_NIGHT_CYCLE/8);
 	
-	console.log("You can plant trees here like this: new Tree(100);");
+	console.log("You found a secret: type new Tree(100); into the console to plant a tree.");
 
 });
 
