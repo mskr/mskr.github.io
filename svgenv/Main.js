@@ -20,6 +20,8 @@ $(document).ready(function() {
     });
 
     masterTL.seek(DAY_NIGHT_CYCLE/8);
+	
+	console.log("You can plant trees here like this: new Tree(100);");
 
 });
 
