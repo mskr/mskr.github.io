@@ -4,12 +4,33 @@
   <title>Marius</title>
 </head>
 <body>
-  <h3>Hello, I am Marius and I work in media informatics.</h3>
+<h3>Hello, I am Marius and I work in media informatics.</h3>
   
-  <p>If you want to work with me, contact mskr (at) mailbox.org or visit me at <a href="https://github.com/mskr">GitHub</a></p>
+<p>If you want to work with me, contact mskr (at) mailbox.org or visit me at <a href="https://github.com/mskr">GitHub</a></p>
 
 <p>On this site you find <a href="/svgenv">an idyllic SVG environment</a>, a <a href="/datavis">D3 data visualization of an IMDB subset</a>, a <a href="/platformer-gen-2D">Jump'n'Run level generator forked from @sgalban</a> and my <a href="/Copywriting/Readme.md">Copywriting</a>.</p>
 
-  <footer><a href="https://github.com/mskr/mskr.github.io">Website source code</a></footer>
-  </body>
+<footer>
+  <a href="https://github.com/mskr/mskr.github.io">Website source code</a>
+  <p>Last change: <span class="lastChangeInfo"></span></p>
+</footer>
+  
+<script>
+fetchLastChangeInfoFromGitHub().then(
+  (lastChangeInfo) => document.querySelector("footer .lastChangeInfo").textContent = lastChangeInfo
+)
+  
+function fetchLastChangeInfoFromGitHub() {
+  return new Promise(function(resolve, reject) {
+    fetch("https://api.github.com/repos/mskr/mskr.github.io/commits?path=/")
+    .then((response) => response.json())
+    .then((commits) => {
+      let date = commits[0]['commit']['author']['date']
+      resolve(new Date(date).toLocaleString())
+    })
+    .catch((error) => reject(error))
+  })
+}
+</script>
+</body>
 </html>
