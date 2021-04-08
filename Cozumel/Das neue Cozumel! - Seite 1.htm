@@ -1,0 +1,873 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><script type="text/javascript" id="__gaOptOutExtension">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-15">
+	        <script type="text/javascript">
+        var dateTimeOffset = new Date().getTimezoneOffset();
+        
+        function getElementsByClassNameLocalTimeWrapper() {
+            return document.getElementsByClassName("localtime");
+        }
+        
+        (function () {
+            var onload = function () {
+                var elementArray = new Array();
+                
+                if (document.getElementsByClassName) {
+                    elementArray = getElementsByClassNameLocalTimeWrapper();
+                } else {
+                    var re = new RegExp('(^| )localtime( |$)');
+                    var els = document.getElementsByTagName("*");
+                    for (var i=0,j=els.length; i<j; i++) {
+                        if (re.test(els[i].className))
+                            elementArray.push(els[i]);
+                    }
+                }
+                
+                for (var i = 0; i < elementArray.length; i++) {    
+                    var timeLocal = new Date(parseInt(elementArray[i].getAttribute("data-timestamp")));
+                    var hour = timeLocal.getHours();
+                    var ap = "am";
+                    if (hour > 11) {
+                        ap = "pm";
+                    }
+                    else if (hour > 12) {
+                        hour = hour - 12;
+                    }
+                    
+                    var string = elementArray[i].getAttribute("data-template");
+                    string = string.replace("[Y]", timeLocal.getFullYear());
+                    string = string.replace("[m]", ('0' + (timeLocal.getMonth() + 1)).slice(-2));
+                    string = string.replace("[d]", ('0' + timeLocal.getDate()).slice(-2));
+                    string = string.replace("[H]", ('0' + timeLocal.getHours()).slice(-2));
+                    string = string.replace("[g]", ('0' + hour).slice(-2));
+                    string = string.replace("[i]", ('0' + timeLocal.getMinutes()).slice(-2));
+                    string = string.replace("[s]", ('0' + timeLocal.getSeconds()).slice(-2));
+                    string = string.replace("[a]", ap);
+                    elementArray[i].childNodes[0].nodeValue = string;
+                }
+            };
+            
+            if (window.addEventListener)
+                window.addEventListener("DOMContentLoaded", onload);
+            else if (window.attachEvent)
+                window.attachEvent("onload", onload);
+        })();
+        </script><link rel="icon" href="https://img.webme.com/pic/c/compact-cozumel/compact-cozumel.ico" type="image/x-icon">
+<link rel="shortcut icon" type="image/x-icon" href="https://img.webme.com/pic/c/compact-cozumel/compact-cozumel.ico">
+<link type="image/x-icon" href="https://img.webme.com/pic/c/compact-cozumel/compact-cozumel.ico">
+<link href="https://wtheme.webme.com/img/main/ios_icons/apple-touch-icon.png" rel="apple-touch-icon">
+<link href="https://wtheme.webme.com/img/main/ios_icons/apple-touch-icon-76x76.png" rel="apple-touch-icon" sizes="76x76">
+<link href="https://wtheme.webme.com/img/main/ios_icons/apple-touch-icon-120x120.png" rel="apple-touch-icon" sizes="120x120">
+<link href="https://wtheme.webme.com/img/main/ios_icons/apple-touch-icon-152x152.png" rel="apple-touch-icon" sizes="152x152">
+<meta property="og:title" content="Das neue Cozumel! - Seite 1">
+<meta property="og:image" content="https://theme.webme.com/designs/red/screen.jpg">
+<style>
+.cc_container .cc_btn, .cc_container .cc_btn:visited {
+    background-color: rgb(255, 255, 255) !important;
+}
+.cc_container .cc_btn:hover, .cc_container .cc_btn:active {
+    background-color: rgb(255, 192, 29) !important;
+}
+
+/* originally "left: initial", but this is not supported by IE, and CookieConsent appears left instead of right */ 
+@media screen and (min-width: 500px) {
+.cc_container {
+    left: auto !important;
+}
+}
+
+
+</style>
+<script type="text/javascript">
+    window.cookieconsent_options = {"message":"Diese Website verwendet Cookies. Durch die Nutzung erkl&#228;rst du dich mit dem Einsatz von Cookies einverstanden.","dismiss":"OK","learnMore":"Mehr Details","link":"https://homepage-baukasten.de/de/Datenschutzerklaerung.php","theme":"dark-floating","expiryDays":365};
+</script>
+<script type="text/javascript" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/cookieconsent.js"></script>
+	<title>Das neue Cozumel! - Seite 1</title>
+	<style type="text/css">
+	<!--
+		body {
+			background-color: #4a0001;
+		}
+		a {
+			color: black;
+			text-decoration: none;
+		}
+		.Stil1 {color: #999999}
+		.Stil2 {
+			color: #FFFFFF;
+			font-weight: bold;
+		}
+		.Stil3 {
+			font-family: impact;
+			color: #FFFFFF;
+		}
+		.Stil4 {font-size: 36px}
+		.shoutbox {
+			overflow: auto;
+			height: 300px;
+			width: 200px;
+		}
+		.rednav {
+			font-family: Tahoma, arial, helvetica, serif;
+			font-size: 13px;
+		}
+		.redcontent,TD {
+			font-family: Tahoma, arial, helvetica, serif;
+			font-size: 12px;
+		}
+		.edit_rechts_bg, .edit_rechts_header, .edit_rechts_header2 {
+		  background-repeat: repeat-y;
+		}
+			//-->
+	</style>
+<link rel="stylesheet" type="text/css" href="Das%20neue%20Cozumel!%20-%20Seite%201_files/dark-floating.css"></head>
+<body topmargin="0" rightmargin="0" leftmargin="0" bottommargin="0" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/spacer.gif"><div class="cc_banner-wrapper "><div class="cc_banner cc_container cc_container--open"><a href="#null" data-cc-event="click:dismiss" target="_blank" class="cc_btn cc_btn_accept_all">OK</a><p class="cc_message">Diese Website verwendet Cookies. Durch die Nutzung erklärst du dich mit dem Einsatz von Cookies einverstanden. <a data-cc-if="options.link" target="_self" class="cc_more_info" href="https://homepage-baukasten.de/de/Datenschutzerklaerung.php">Mehr Details</a></p><a class="cc_logo" target="_blank" href="http://silktide.com/cookieconsent">Cookie Consent plugin for the EU cookie law</a></div></div>
+<meta name="verify-v1" content="KuOsqI1rDYAGEDo9fFAnV9ksnHpzLiQa0YMssb9jVhA=">
+
+
+
+
+<style type="text/css"> 
+<!-- 
+
+
+
+td.edit_navhead {
+	background-image:url("https://img.webme.com/pic/c/compact-cozumel/navhead.gif");
+}
+
+td.edit_navi_bg {
+	background-image:url("https://img.webme.com/pic/c/compact-cozumel/navi_bg.gif");
+}
+
+td.edit_links_bg {
+	background-image:url("https://img.webme.com/pic/c/compact-cozumel/links.gif");
+}
+
+td.edit_rechts_bg_unten {
+	background-image:url("https://img.webme.com/pic/c/compact-cozumel/rechts.gif");
+}
+
+td.edit_content_header {
+	background-image:url("https://img.webme.com/pic/c/compact-cozumel/cont_head_bg.gif");
+}
+
+td.edit_rechts_header {
+	background-image:url("https://img.webme.com/pic/c/compact-cozumel/head.gif");
+}
+
+td.edit_rechts_header2 {
+	background-image:url("https://img.webme.com/pic/c/compact-cozumel/top.gif");
+}
+
+td.edit_rechts_bg {
+	background-image:url("https://img.webme.com/pic/c/compact-cozumel/main.gif");
+}
+
+td.edit_bottom_bg img,td.rb_footer img,td.nav_mini img,td.edit_navi_top img {
+	visibility:hidden;
+}
+
+td.edit_bottom_bg {
+	background:url(https://img.webme.com/pic/c/compact-cozumel/bottom.gif);
+}
+
+td.rb_footer {
+	background:url(https://img.webme.com/pic/c/compact-cozumel/bottom2.gif);
+}
+
+td.nav_mini {
+	background:url(https://img.webme.com/pic/c/compact-cozumel/navi_bottom.gif);
+}
+
+td.edit_navi_top {
+	background:url(https://img.webme.com/pic/c/compact-cozumel/navi_top.gif);
+}
+
+td.rb_over {
+	background:url(https://img.webme.com/pic/c/compact-cozumel/navi_top.gif) no-repeat center bottom;
+}
+
+td.edit_zeile3 {
+	background:none;
+}
+
+td.rb_bottom {
+	display:none;
+}
+
+
+
+--> 
+</style>
+
+<style type="text/css">
+<!--
+font{font-family:Tahoma; font:Tahoma;}
+//-->
+</style><br><table width="1000" cellspacing="0" cellpadding="0" border="0" align="center">
+	<tbody><tr>
+		<td colspan="3" class="edit_header" height="178" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/header.png">
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+				<tbody><tr>
+					<td class="edit_header_sub_1" width="5%">&nbsp;</td>
+					<td class="edit_header_sub_2" width="95%" height="125">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="edit_header_sub_3">&nbsp;</td>
+					<td class="Stil3"></td>
+				</tr>
+			</tbody></table>
+		</td>
+	</tr>
+	<tr>
+		<td class="edit_links_bg" width="23" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/links.gif"></td>
+		<td class="edit_main_bg" width="955" valign="top" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/main_bg.gif" align="left">
+			<table width="955" cellspacing="0" cellpadding="0" border="0">
+				<tbody><tr>
+					<td class="edit_page_main_top" width="3"></td>
+					<td class="edit_page_main_bg" width="206" valign="top" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/page_main_bg.gif" align="left">
+						<table width="206" cellspacing="0" cellpadding="0" border="0">
+							<tbody><tr>
+								<td colspan="2" class="edit_links_bg_unten" height="10"></td>
+							</tr>
+							<tr>
+								<td class="edit_links_navi_left_spacer" width="4"></td>
+								<td class="edit_links_navi_container" width="202">
+									<table width="100%" cellspacing="0" cellpadding="0" border="0">
+										<tbody><tr>
+											<td class="edit_navi_top"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/navi_top.gif" width="202" height="4"></td>
+										</tr>
+										<tr>
+											<td class="edit_navi_bg" valign="top" height="120" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/navi_bg.gif" align="left">
+												<table width="100%" cellspacing="0" cellpadding="0" border="0">
+													<tbody><tr>
+														<td style="padding-left:10px;color:white;" class="edit_navhead" height="23" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/navhead.gif"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/navi_titel_2.png"></td>
+													</tr>
+													<tr>
+														<td class="edit_nav_klein" height="4"></td>
+													</tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/home2.gif"><a target="_self" href="http://www.compact-cozumel.de.tl/Willkommen.htm">Home</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/downloads.png">
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Programme.htm" class="rednav">Programme</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Seite-1.htm" class="rednav">=&gt; Seite 1</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Seite-2.htm" class="rednav">=&gt; Seite 2</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Scherzprogramme.htm" class="rednav">=&gt; Scherzprogramme</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Spiele.htm" class="rednav">Spiele</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Handy.htm" class="rednav">Handy</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/fun_final.png">
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Flashs.htm" class="rednav">Flashs</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Kopfsto.ss..htm" class="rednav">Kopfstoß</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Zufallsspr.ue.che.htm" class="rednav">Zufallssprüche</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Zufallswitz.htm" class="rednav">Zufallswitz</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/sonstiges_final.png">
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/ClubMix.htm" class="rednav">ClubMix</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Chatten.htm" class="rednav">Chatten</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Change-Language.htm" class="rednav">Change Language</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/%3Cb%3EG.ae.stebuch%3C-s-b%3E.htm" class="rednav"><span style="color:#000000;"><b>Gästebuch</b></span></a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Kontakt.htm" class="rednav">Kontakt</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="edit_button_bg" height="28" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/button_bg.gif">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr>
+                                                                    <td width="11%">&nbsp;</td>
+                                                                    <td width="89%"><a href="https://compact-cozumel.de.tl/Sitemap.htm" class="rednav">Sitemap</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="1"></td>
+                                                    </tr>
+												</tbody></table>
+											</td>
+										</tr>
+										<tr>
+											<td class="nav_mini"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/navi_bottom.gif" width="202" height="4"></td>
+										</tr>
+									</tbody></table>
+									<br>
+									<font style="padding-left:5px;" color="white">
+										seit Februar 2009									</font>
+								</td>
+							</tr>
+						</tbody></table>
+					</td>
+					<td class="edit_page_main2" width="522" valign="top" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/page_main_bg.gif" align="left">
+						<table width="100%" cellspacing="0" cellpadding="0" border="0">
+							<tbody><tr>
+								<td class="content_over"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/cont_top.gif" width="522" height="11"></td>
+							</tr>
+							<tr>
+								<td class="edit_content_bg" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/cont_bg.gif">
+									<table width="100%" cellspacing="0" cellpadding="0" border="0">
+										<tbody><tr>
+											<td class="edit_content_header" height="37" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/cont_head_bg.gif">
+												<table width="100%" cellspacing="0" cellpadding="0" border="0">
+													<tbody><tr>
+														<td class="Stil2_left" width="3%" height="37">&nbsp;</td>
+														<td class="edit_Stil2_right" width="97%"><span class="Stil2">Seite 1</span></td>
+													</tr>
+												</tbody></table>
+											</td>
+										</tr>
+										<tr>
+											<td class="cont" style="padding-left:15px;" valign="TOP" height="300">
+												<div style="width: 510px; overflow: auto; ">
+													<table width="480" height="100%">
+														<tbody><tr>
+															<td><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/programme_titel.png"><br>
+<br>
+<table width="489" cellspacing="1" cellpadding="1" align="center">
+    <tbody>
+        <tr>
+            <td colspan="4" bgcolor="#666666"><font face="Tahoma" color="#ededed"><strong>Programme Downloads - Seite 1</strong></font></td>
+        </tr>
+        <tr>
+            <td bgcolor="#ededed"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/gamecam.png">&nbsp;GameCam</font></td>
+            <td bgcolor="#ededed"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/vergroessern_12x12.png"></font><a href="https://img.webme.com/pic/c/compact-cozumel/gamecamscreen.png"><font face="Tahoma">Screen</font></a></td>
+            <td bgcolor="#ededed"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/download_12x12.png"></font><a target="_blank" href="http://rs272.rapidshare.com/files/126444510/GameCamV2.exe"><font face="Tahoma">Download</font></a></td>
+            <td bgcolor="#ededed"><font face="Tahoma">Sequenzen aus 
+einem Spiel aufnehmen und auf dem PC als Video speichern. (Das ist eine 
+gecrackte Version, man muss sich also nicht mehr für Geld registrieren)</font></td>
+        </tr>
+        <tr>
+            <td bgcolor="#f9f9f9"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/winrar.png">&nbsp;WinRAR</font></td>
+            <td bgcolor="#f9f9f9"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/vergroessern_12x12.png"></font><a href="https://img.webme.com/pic/c/compact-cozumel/winrarscreen.png"><font face="Tahoma">Screen</font></a></td>
+            <td bgcolor="#f9f9f9"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/download_12x12.png"></font><a href="http://www.rarlab.com/rar/wrar380d.exe"><font face="Tahoma">Download</font></a></td>
+            <td bgcolor="#f9f9f9"><font face="Tahoma">Packen, Entpacken von Dateien und öffnen von Archiven wie .jar, .rar, .zip usw.</font></td>
+        </tr>
+        <tr>
+            <td bgcolor="#ededed"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/glaryutilities.png">&nbsp;Glary Utilities</font></td>
+            <td bgcolor="#ededed"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/vergroessern_12x12.png"></font><a href="https://img.webme.com/pic/c/cozumel/glary.jpg"><font face="Tahoma">Screen</font></a></td>
+            <td bgcolor="#ededed"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/download_12x12.png"></font><a href="http://dw.com.com/redir?edId=3&amp;siteId=4&amp;oId=3001-2094_4-10508531&amp;ontId=2094_4&amp;spi=9d78ae5f89d1b4d99941648fdb1fb51e&amp;lop=txt&amp;tag=idl2&amp;pid=11006609&amp;mfgId=6280556&amp;merId=6280556&amp;pguid=y3OppwoPjF0AAD0g2CUAAABd&amp;destUrl=http%3a%2f%2fsoftware-files.download.com%2fsd%2fSfOnk1634TABKQ8TUdtUYbTJrLYfUmjkRMNMBN3O6MoYPdIifH7_2nZP11seU3th8268W4QqkhJxm2sicZX6qOIuaWm2lygb%2fsoftware%2f11006609%2f10508531%2f3%2fgusetup.exe%3flop%3dlink%26ptype%3d1901%26ontid%3d2094%26siteId%3d4%26edId%3d3%26spi%3d9d78ae5f89d1b4d99941648fdb1fb51e%26pid%3d11006609%26psid%3d10508531"><font face="Tahoma">Download</font></a></td>
+            <td bgcolor="#ededed"><font face="Tahoma">PC von unnötigen verlangsamenden Daten reinigen.</font></td>
+        </tr>
+        <tr>
+            <td bgcolor="#f9f9f9"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/shutdown.png">&nbsp;Shut Down</font></td>
+            <td bgcolor="#f9f9f9"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/vergroessern_12x12.png"><font color="#808080">Screen</font></font></td>
+            <td bgcolor="#f9f9f9"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/download_12x12.png"></font><a href="http://www.winload.de/download.php?subid=6c594636b2e624ed1fda9a19536aea0d&amp;programm_id=35304"><font face="Tahoma">Download</font></a></td>
+            <td bgcolor="#f9f9f9"><font face="Tahoma">Einstellen, wann der PC automatisch runterfahren soll.</font></td>
+        </tr>
+        <tr>
+            <td bgcolor="#ededed"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/stickies.png">&nbsp;Stickies</font></td>
+            <td bgcolor="#ededed"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/vergroessern_12x12.png"></font><a href="http://static.sftcdn.net/de/scrn/22000/22769/3_stickies_02.jpg"><font face="Tahoma">Screen</font></a></td>
+            <td bgcolor="#ededed"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/download_12x12.png"></font><a href="http://www.zhornsoftware.co.uk/stickies/stickies_setup.exe"><font face="Tahoma">Download</font></a></td>
+            <td bgcolor="#ededed"><font face="Tahoma">Virtuelle Klebezettel an den Desktop hängen.</font></td>
+        </tr>
+        <tr>
+            <td bgcolor="#f9f9f9"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/mousometer.png">&nbsp;Mousometer</font></td>
+            <td bgcolor="#f9f9f9"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/vergroessern_12x12.png"></font><a href="https://img.webme.com/pic/c/cozumel/mm.jpg"><font face="Tahoma">Screen</font></a></td>
+            <td bgcolor="#f9f9f9"><font face="Tahoma"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/download_12x12.png"></font><a href="http://www.svenbader.de/download/Mousometer.gadget.zip"><font face="Tahoma">Download</font></a></td>
+            <td bgcolor="#f9f9f9"><font face="Tahoma">Messen, welche Strecke die Maus wie schnell&nbsp;zurücklegt. (Sidebar Gadget nur für Vista!)</font></td>
+        </tr>
+    </tbody>
+</table>
+<p align="center"><font face="Tahoma"><font color="#c0c0c0"><font color="#339966">
+</font></font></font></p><table style="width: 36px; height: 23px" width="36" cellspacing="1" cellpadding="1" border="0" align="left">
+    <tbody>
+        <tr>
+            <td><u><font face="Tahoma" color="#339966"><a href="http://www.compact-cozumel.de.tl/Programme.htm"><font color="#339966">&lt;=zurück</font></a></font></u></td>
+        </tr>
+    </tbody>
+</table><font face="Tahoma"><font color="#c0c0c0"><font color="#339966">
+<table style="width: 34px; height: 23px" width="34" cellspacing="1" cellpadding="1" border="0" align="right">
+    <tbody>
+        <tr>
+            <td><a href="http://www.compact-cozumel.de.tl/Seite-2.htm"><font face="Tahoma"><font color="#339966">weiter</font><font color="#339966">=&gt;</font></font></a></td>
+        </tr>
+    </tbody>
+</table>
+<table style="width: 52px; height: 27px" width="52" cellspacing="1" cellpadding="1" border="0" align="center">
+    <tbody>
+        <tr>
+            <td><font face="Tahoma"><font style="background-color: rgb(51,153,102)" size="3" color="#ccffcc">&nbsp;1 </font>&nbsp;&nbsp; </font><a href="http://www.compact-cozumel.de.tl/Seite-2.htm"><font size="3" face="Tahoma" color="#339966">2</font></a></td>
+        </tr>
+    </tbody>
+</table>
+</font>&nbsp;&nbsp;</font><font color="#339966">&nbsp;&nbsp;</font></font><font face="Tahoma" color="#339966">&nbsp; </font><p></p></td>
+														</tr>
+													</tbody></table>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td class="cont_bottom"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/cont_bottom.gif" width="522"></td>
+										</tr>
+									</tbody></table>
+								</td>
+							</tr>
+						</tbody></table>
+					</td>
+	 				<td class="edit_zeile" width="221" valign="top" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/left_bg.gif" align="left">
+	 					<table width="100%" cellspacing="0" cellpadding="0" border="0">
+							<tbody><tr>
+								<td class="edit_zeile2" valign="top" height="100" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/left_bg.gif" align="left">
+									<table width="100%" cellspacing="0" cellpadding="0" border="0">
+										<tbody><tr>
+											<td class="edit_zeile3" valign="top" height="100" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/left_bg2.gif" align="left">
+												<table width="100%" cellspacing="0" cellpadding="0" border="0">
+													<tbody><tr>
+														<td class="rb_over" height="16"></td>
+													</tr>
+													<tr>
+														<td style="padding-left:10px;color:white;" class="edit_rechts_header" height="23" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/head.gif"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/besucher_3px_spiegel.png"></td>
+													</tr>
+													<tr>
+														<td class="edit_rechts_container" height="17">
+															<table width="100%" cellspacing="0" cellpadding="0" border="0">
+																<tbody><tr>
+																	<td class="edit_rechts_header2" height="23" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/top.gif">&nbsp;</td>
+																</tr>
+																<tr>
+																	<td class="edit_rechts_bg" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/main.gif" align="center">
+																		<!-- Microcounter-START -->
+<a href="http://www.microcounter.de/">
+<img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/microcounter" alt="" drw2cyn65="" width="100" height="60" border="0"></a>
+<!-- Microcounter-END -->																	</td>
+																</tr>
+															<tr>
+																<td class="rb_footer"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/bottom2.gif" width="217" height="19"></td>
+															</tr>
+														</tbody></table></td>
+													</tr>
+													<tr>
+														<td style="padding-left:10px;color:white;" class="edit_rechts_header" height="23" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/head.gif"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/aktionen_3px_spiegel.png"></td>
+													</tr>
+													<tr>
+														<td class="edit_rechts_container" height="17">
+															<table width="100%" cellspacing="0" cellpadding="0" border="0">
+																<tbody><tr>
+																	<td class="edit_rechts_header2" height="23" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/top.gif">&nbsp;</td>
+																</tr>
+																<tr>
+																	<td class="edit_rechts_bg" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/main.gif" align="center">
+																		<table style="width: 130px; height: 58px;" cellspacing="1" cellpadding="1" border="0">
+    <tbody>
+<tr>
+            <td align="center"><a target="_self" href="http://www.cozumel.de.tl/"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/home.png" alt="" border="0"></a></td>
+            <td style="text-align: left;"><a target="_self" href="http://www.cozumel.de.tl/">zum Start</a></td>
+        </tr><tr>
+            <td align="center"><a target="_parent" href="javascript:window.external.AddFavorite('http://www.compact-cozumel.de.tl/', 'Das neue Cozumel!')"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/favortien_16x16.png" alt="" border="0"></a></td>
+            <td style="text-align: left;"><a target="_parent" href="javascript:window.external.AddFavorite('http://www.compact-cozumel.de.tl/', 'Das neue Cozumel!')">zu den Favoriten</a></td>
+        </tr>
+        <tr>
+            <td><a href="http://squibie.de/user/cc" target="_self"><img alt="" src="Das%20neue%20Cozumel!%20-%20Seite%201_files/online_user.png" border="0"></a></td>
+            <td style="text-align: left;"><a href="http://squibie.de/user/cc" target="_self">wer ist online?</a></td>
+        </tr>
+<tr>
+            <td align="center"><a target="_self" href="http://compact-cozumel.de.tl/Sitemap.htm"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/sitemap.png" alt="" border="0"></a></td>
+            <td style="text-align: left;"><a target="_self" href="http://compact-cozumel.de.tl/Sitemap.htm">Sitemap</a></td>
+</tr><tr>
+            <td align="center"><a target="_self" href="http://compact-cozumel.de.tl/%3Cb%3EG.ae.stebuch%3C-s-b%3E.htm?PHPSESSID=b03c40f6a42e312b68d694c70219aede"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/guestbook.png" alt="" border="0"></a></td>
+            <td style="text-align: left;"><a target="_self" href="http://compact-cozumel.de.tl/%3Cb%3EG.ae.stebuch%3C-s-b%3E.htm?PHPSESSID=b03c40f6a42e312b68d694c70219aede">Gästebuch</a></td>
+    </tr></tbody>
+</table>																	</td>
+																</tr>
+															<tr>
+																<td class="rb_footer"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/bottom2.gif" width="217" height="19"></td>
+															</tr>
+														</tbody></table></td>
+													</tr>
+													<tr>
+														<td style="padding-left:10px;color:white;" class="edit_rechts_header" height="23" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/head.gif"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/links_3px_spiegel.png"></td>
+													</tr>
+													<tr>
+														<td class="edit_rechts_container" height="17">
+															<table width="100%" cellspacing="0" cellpadding="0" border="0">
+																<tbody><tr>
+																	<td class="edit_rechts_header2" height="23" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/top.gif">&nbsp;</td>
+																</tr>
+																<tr>
+																	<td class="edit_rechts_bg" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/main.gif" align="center">
+																		<a href="http://www.cozumel.de.tl/%3Cimg-src%3D-g-http-d--s--s-img-.-webme-.-com-s-pic-s-c-s-cozumel-s-home-.-gif-g---s-%3E-Home.htm?PHPSESSID=b9671f465d91b5fb777888e35c7ea399" target="_blank"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/cozumel.png" border="0"></a>
+
+<p>
+
+<a href="http://www.metin2-4life.de.tl/" target="_blank"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/metin2-4life.png" border="0"></a>
+
+</p><p>
+
+<a href="http://www.inflamare.de.tl/" target="_blank"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/inflamare.png" border="0"></a>
+
+</p><p>
+
+<a href="http://www.hplinks.de.tl/" target="_blank"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/hplinks.png" border="0"></a>																	</p></td>
+																</tr>
+															<tr>
+																<td class="rb_footer"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/bottom2.gif" width="217" height="19"></td>
+															</tr>
+														</tbody></table></td>
+													</tr>
+												</tbody></table>
+											</td>
+										</tr>
+										<tr>
+											<td class="rb_bottom"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/left_bottom.gif"></td>
+										</tr>
+									</tbody></table>
+								</td>
+							</tr>
+							<tr>
+								<td class="rb_bottom2" height="58">&nbsp;</td>
+							</tr>
+						</tbody></table>
+					</td>
+					<td class="rb_right_mini" width="3"></td>
+				</tr>
+			</tbody></table>
+		</td>
+		<td class="edit_rechts_bg_unten" width="22" height="400" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/rechts.gif"></td>
+	</tr>
+	<tr>
+		<td colspan="3" class="edit_bottom_bg" background="Das%20neue%20Cozumel!%20-%20Seite%201_files/links.gif"><img src="Das%20neue%20Cozumel!%20-%20Seite%201_files/bottom.gif" width="1000" height="25"></td>
+	</tr>
+</tbody></table>
+<center>
+	<font style="font-size: 11px;	font-family: Tahoma, Arial, Helvetica, sans-serif" color="white"></font>
+</center>
+<!--We want every page to be scrollable to the bottom and assume that 90px are usually enough-->
+<div style="height:90px">
+
+</div>
+
+<a id="selfpromotionOverlay" href="https://www.homepage-baukasten.de/?c=4000&amp;utm_source=selfpromotion&amp;utm_campaign=overlay&amp;utm_medium=footer" target="_blank" rel="nofollow">
+    Diese Webseite wurde kostenlos mit <b>Homepage-Baukasten.de</b> erstellt. Willst du auch eine eigene Webseite?
+
+    <div class="btn btn-1">Gratis anmelden</div>
+
+</a>
+<style>
+    /* General button style */
+    #selfpromotionOverlay .btn {
+        border: none;
+        font-size: inherit;
+        color: inherit;
+        background: none;
+        cursor: pointer;
+        padding: 6px 15px;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 700;
+        outline: none;
+        position: relative;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        transition: all 0.3s;
+        margin: 0px;
+    }
+
+    /* Button 1 */
+    #selfpromotionOverlay .btn-1, #selfpromotionOverlay .btn-1:visited {
+        background: rgb(0, 85, 204);
+        color: #fff;
+    }
+
+    #selfpromotionOverlay .btn-1:hover {
+        background: #2980b9;
+    }
+
+    #selfpromotionOverlay .btn-1:active {
+        background: #2980b9;
+        top: 2px;
+    }
+
+    #selfpromotionOverlay {
+        font: 400 12px/1.8 "Open Sans", Verdana, sans-serif;
+        text-align: center;
+        opacity: 1;
+        transition: opacity 1s ease;
+        position: fixed;
+        overflow: hidden;
+        box-sizing: border-box;
+        font-size: 14px;
+        text-decoration: none;
+        line-height: 1.5em;
+        flex-wrap: nowrap;
+        z-index: 5000;
+        padding: 14px;
+        width: 100%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        color: rgb(35,35,35);
+        background-color: rgb(246,246,246);
+        border-top: 1px solid #5a5a5a;
+    }
+
+    #selfpromotionOverlay:hover {
+        background: white;
+        text-decoration: none;
+    }
+</style>
+
+</body></html>
