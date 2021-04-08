@@ -16,9 +16,15 @@
 <script>
 setTimeout(function() {
 	new Tree(100);
-	new Tree(200);
-	new Tree(50);
-	new Tree(110);
+	setTimeout(function() {
+		new Tree(120);
+		setTimeout(function() {
+			new Tree(150);
+		}, 500);	
+			setTimeout(function() {
+				new Tree(200);
+			}, 500);	
+	}, 500);	
 }, 5000);	
 </script>
 </head>
