@@ -1,0 +1,5 @@
+Ein Bild vom Wesen der Softwareentwicklung: Erfahrungen aus zwei agilen Projekten (Leonore Dietrich, Andreas Gramm, Petra Kastl und Ralf Romeike, Gesellschaft für Informatik, Bonn 2015)
+
+[BENUTZT] Ein gamebasierter Ansatz zum Programmierunterricht in der Lehrerinnen- und Lehrerbildung (Nico Steinbach und Eckart Zitzler, Gesellschaft für Informatik, Bonn 2017)
+
+[BENUTZT] Game Design Workshops mit zwei Schulklassen (Christoph Kaindel, Medienimpulse, 2015)
