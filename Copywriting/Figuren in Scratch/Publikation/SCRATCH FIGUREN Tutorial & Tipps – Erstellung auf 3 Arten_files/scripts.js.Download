@@ -1,0 +1,12 @@
+jQuery( document ).ready(function() {
+
+    jQuery('.category_widget ul > li.current-menu-parent, .category_widget ul > li.current-menu-item').addClass('active');
+    
+    jQuery('.category_widget ul > li.menu-item-has-children > a').click(function(e) { 
+        	jQuery(this).parents('li').toggleClass('active');
+        	// jQuery(this).siblings('ul').slideToggle();
+        	e.preventDefault();   
+    });
+
+});
+
