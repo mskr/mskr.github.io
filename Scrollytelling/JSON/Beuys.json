@@ -1,0 +1,353 @@
+{
+  "01 Cover 1": {
+    "pages": 4,
+    "thing": "A_Video_Plane",
+    "position": [
+      3,
+      4,
+      11
+    ]
+  },
+  "02 Beuys Video 1": {
+    "pages": 1,
+    "thing": "A_Video_Plane",
+    "position": [
+      4,
+      3,
+      0
+    ]
+  },
+  "02 Beuys Video 2": {
+    "pages": 2,
+    "thing": "A_Video_Plane",
+    "position": [
+      2,
+      3,
+      -5
+    ]
+  },
+  "02 ZZZ": {
+    "pages": 2,
+    "motionType": "turn",
+    "position": [
+      2,
+      3,
+      -5
+    ]
+  },
+  "03 Westmensch 1": {
+    "pages": 1,
+    "thing": "B_Book",
+    "position": [
+      15,
+      2,
+      -10
+    ]
+  },
+  "03 Westmensch 2": {
+    "pages": 1,
+    "thing": "B_Book",
+    "position": [
+      17,
+      2,
+      -10
+    ]
+  },
+  "03 Westmensch 3": {
+    "pages": 2,
+    "thing": "B_Book",
+    "position": [
+      22,
+      6,
+      -11
+    ]
+  },
+  "03 Westmensch 4": {
+    "pages": 1,
+    "thing": "B_Book",
+    "position": [
+      25,
+      4,
+      -11
+    ]
+  },
+  "03 ZZZ": {
+    "pages": 2,
+    "motionType": "turn",
+    "position": [
+      25,
+      4,
+      -11
+    ]
+  },
+  "04 Der Chef 1": {
+    "pages": 1,
+    "thing": "C_Der_Chef",
+    "position": [
+      27,
+      3,
+      -14
+    ]
+  },
+  "04 Der Chef 2": {
+    "pages": 4,
+    "thing": "C_Der_Chef",
+    "position": [
+      29,
+      3,
+      -14
+    ]
+  },
+  "04 ZZZ": {
+    "pages": 4,
+    "motionType": "turn",
+    "position": [
+      29,
+      3,
+      -13
+    ]
+  },
+  "05 Schlitten 1": {
+    "pages": 1,
+    "thing": "D_Sledge",
+    "position": [
+      29,
+      3,
+      -11
+    ]
+  },
+  "05 Schlitten 2": {
+    "pages": 1,
+    "thing": "D_Sledge",
+    "position": [
+      29,
+      3,
+      -2
+    ]
+  },
+  "05 Schlitten 3": {
+    "thing": "D_Sledge",
+    "position": [
+      29,
+      6,
+      4
+    ],
+    "pages": 1
+  },
+  "05 Schlitten 4": {
+    "pages": 3,
+    "thing": "D_Sledge",
+    "position": [
+      30,
+      6.5,
+      4
+    ]
+  },
+  "05 Schlitten 5": {
+    "pages": 3,
+    "thing": "D_Sledge",
+    "position": [
+      30,
+      6,
+      5
+    ]
+  },
+  "05 ZZZ": {
+    "pages": 2,
+    "motionType": "turn",
+    "position": [
+      30,
+      6,
+      5
+    ]
+  },
+  "06 Die Revolution Sind Wir 1": {
+    "pages": 1,
+    "thing": "E_Die_revolution_sind_wir",
+    "position": [
+      30,
+      6,
+      5
+    ]
+  },
+  "06 Die Revolution Sind Wir 2": {
+    "pages": 2,
+    "thing": "E_Die_revolution_sind_wir",
+    "position": [
+      -2,
+      5,
+      16
+    ]
+  },
+  "06 Die Revolution Sind Wir 3": {
+    "pages": 2,
+    "thing": "E_Die_revolution_sind_wir",
+    "position": [
+      -3,
+      5,
+      17
+    ]
+  },
+  "06 Die Revolution Sind Wir 4": {
+    "pages": 2,
+    "thing": "E_Die_revolution_sind_wir",
+    "position": [
+      -4,
+      5,
+      18
+    ]
+  },
+  "06 Die Revolution Sind Wir 5": {
+    "pages": 1,
+    "thing": "E_Die_revolution_sind_wir",
+    "position": [
+      -6,
+      5,
+      19
+    ]
+  },
+  "06 ZZZ": {
+    "pages": 2,
+    "motionType": "turn",
+    "position": [
+      -6,
+      5,
+      19
+    ]
+  },
+  "07 Das Kapital Raum 1": {
+    "pages": 1,
+    "thing": "F_Das_Kapiital",
+    "position": [
+      -11,
+      4,
+      20
+    ]
+  },
+  "07 Das Kapital Raum 2": {
+    "pages": 2,
+    "thing": "F_Das_Kapiital",
+    "position": [
+      -40,
+      3,
+      22
+    ]
+  },
+  "07 Das Kapital Raum 3": {
+    "pages": 1,
+    "thing": "F_Das_Kapiital",
+    "position": [
+      -43,
+      2.5,
+      23
+    ]
+  },
+  "07 Das Kapital Raum 4": {
+    "pages": 4,
+    "thing": "F_Das_Kapiital",
+    "position": [
+      -43,
+      2.5,
+      23
+    ]
+  },
+  "07 ZZZ": {
+    "pages": 2,
+    "motionType": "turn",
+    "position": [
+      -43,
+      2.5,
+      23
+    ]
+  },
+  "08 Quote": {
+    "pages": 1,
+    "thing": "Earth",
+    "position": [
+      -44,
+      3,
+      36
+    ]
+  },
+  "08 ZZZ": {
+    "pages": 2,
+    "motionType": "turn",
+    "position": [
+      -44,
+      3,
+      36
+    ]
+  },
+  "09 Capri Batterie 1": {
+    "pages": 1,
+    "thing": "J_Capri",
+    "position": [
+      -36.91446261308729,
+      2.999935845981213,
+      37.35845981223648
+    ]
+  },
+  "09 Capri Batterie 2": {
+    "pages": 1,
+    "thing": "J_Capri",
+    "position": [
+      -15,
+      3,
+      38
+    ]
+  },
+  "09 Capri Batterie 3": {
+    "pages": 1,
+    "thing": "J_Capri",
+    "position": [
+      11.5,
+      3,
+      37
+    ]
+  },
+  "09 Capri Batterie 4": {
+    "pages": 1,
+    "thing": "J_Capri",
+    "position": [
+      17,
+      3,
+      33.5
+    ]
+  },
+  "09 Capri Batterie 5": {
+    "pages": 6,
+    "thing": "J_Capri",
+    "position": [
+      20,
+      3,
+      33
+    ]
+  },
+  "09 ZZZ": {
+    "pages": 2,
+    "motionType": "turn",
+    "position": [
+      20,
+      3,
+      33
+    ]
+  },
+  "10 Credits 1": {
+    "pages": 1,
+    "thing": "A_Video_Plane",
+    "position": [
+      17.93380773539583,
+      2.9998331978168977,
+      26.83197816889678
+    ]
+  },
+  "10 Credits 2": {
+    "pages": 1,
+    "thing": "A_Video_Plane",
+    "position": [
+      8.793309403670229,
+      3.000008554108817,
+      17.085541088380587
+    ]
+  }
+}

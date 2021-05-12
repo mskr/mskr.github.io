@@ -1,0 +1,29 @@
+<svg width="100%" height="100%" viewBox="0 0 1440 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M288.544 259.072L-460 0H1895.2L1141.02 259.584L288.544 259.072Z" fill="url(#paint0_linear)"/>
+<path d="M1142.05 771.072L1895.2 1024L-460 1024L288.544 771.072L1142.05 771.072Z" fill="url(#paint1_linear)"/>
+<path d="M288.544 259.072L1141.02 259.584L1142.05 771.072H288.544V259.072Z" fill="url(#paint2_radial)"/>
+<path d="M-460 0L288.544 259.072V771.072L-460 1023.49V0Z" fill="url(#paint3_linear)"/>
+<path d="M1895.2 1024L1142.05 771.072L1141.02 259.584L1895.2 6.10352e-05L1895.2 1024Z" fill="url(#paint4_linear)"/>
+<defs>
+<linearGradient id="paint0_linear" x1="717.6" y1="0" x2="717.6" y2="261.632" gradientUnits="userSpaceOnUse">
+<stop stop-color="#DBD4A0" stop-opacity="0.14"/>
+<stop offset="1" stop-color="#DBD4A0"/>
+</linearGradient>
+<linearGradient id="paint1_linear" x1="720.16" y1="1024" x2="720.16" y2="763.392" gradientUnits="userSpaceOnUse">
+<stop stop-color="#DBD4A0" stop-opacity="0.12"/>
+<stop offset="1" stop-color="#DBD4A0"/>
+</linearGradient>
+<radialGradient id="paint2_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(763.68 549.376) rotate(30.401) scale(438.092 729.861)">
+<stop stop-color="#DBD4A0"/>
+<stop offset="1" stop-color="#DBD4A0" stop-opacity="0.51"/>
+</radialGradient>
+<linearGradient id="paint3_linear" x1="288.544" y1="739.84" x2="-460" y2="3.2472e-07" gradientUnits="userSpaceOnUse">
+<stop stop-color="#DBD4A0"/>
+<stop offset="1" stop-color="#DBD4A0" stop-opacity="0.15"/>
+</linearGradient>
+<linearGradient id="paint4_linear" x1="1141.54" y1="770.048" x2="1895.2" y2="0.000339455" gradientUnits="userSpaceOnUse">
+<stop stop-color="#DBD4A0"/>
+<stop offset="1" stop-color="#DBD4A0" stop-opacity="0.08"/>
+</linearGradient>
+</defs>
+</svg>

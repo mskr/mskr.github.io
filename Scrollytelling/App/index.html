@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+<title>Beuys Verstehen - Virtuelle Galerie</title>
+
+<meta charset="utf-8" />
+
+
+
+<!-- Responsive -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<!-- Favicon -->
+
+<link rel="icon" href="Assets/favicon.png" sizes="16x16">
+
+
+
+<!-- CSS -->
+
+<link rel="stylesheet" href="index.css">
+
+
+
+<!-- Scrollytelling code -->
+
+<script type="module" src="index.js"></script>
+
+
+
+<!-- jQuery -->
+
+<script
+src="https://code.jquery.com/jquery-3.6.0.js"
+integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+crossorigin="anonymous"></script>
+<script src="jquery.MultiLanguage.min.js"></script>
+
+
+
+<!-- Mobile detect -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.4.5/mobile-detect.js"></script>
+
+
+
+<!-- View logic -->
+
+<script>
+
+const MAGIC_NUMBER_CREDITS = 72.5;
+
+
+const TRANSLATIONS_MORE = {
+	'de': 'Mehr erfahren',
+	'pl': 'Dowiedz się więcej',
+	'en': 'Read more',
+	'cz': 'Přečtěte si více',
+	'hu': 'Bővebben',
+	'sk': 'Prečítajte si viac',
+	'sl': 'Preberi več',
+	'lt': 'Skaityti daugiau'
+};
+
+
+const TRANSLATIONS_LESS = {
+	'de': 'Weniger',
+	'pl': 'Mniej',
+	'en': 'Less',
+	'cz': 'Méně',
+	'hu': 'Kevesebb',
+	'sk': 'Menej',
+	'sl': 'Manj',
+	'lt': 'Mažiau'
+};
+
+const TRANSLATIONS_SCROLLING = {
+	'de': 'Scrollen Sie weiter',
+	'pl': 'przewijać dalej',
+	'en': 'Keep Scrolling',
+	'cz': 'pokračujte v rolování',
+	'hu': 'görgess tovább',
+	'sk': 'Pokračujte v posúvaní',
+	'sl': 'še naprej se pomikajte',
+	'lt': 'toliau slinkti'
+}
+
+// https://github.com/hgoebl/mobile-detect.js
+var md = new MobileDetect(window.navigator.userAgent);
+
+// iPads are fast, so do not treat them like a mobile
+let currentDevice = {
+  mobile: (md.mobile() != null || md.phone() != null || md.tablet() != null) && md.tablet() != "iPad",
+  tablet: md.tablet() != null,
+};
+currentDevice.deviceClass = currentDevice.tablet ? 1 : currentDevice.mobile ? 2 : 0;
+
+function getCurrentLanguage() {
+	return $('.dropdown .caption').text().toLowerCase();
+}
+
+// Navbar Functionality
+$(function() {
+  
+  $('.dropdown > .caption').on('click', function() {
+    $(this).parent().toggleClass('open');
+  });
+  
+  $('.dropdown > .list > .item').on('click', function() {
+    $('.dropdown > .list > .item').removeClass('selected');
+    $(this).addClass('selected').parent().parent().removeClass('open').children('.caption').text( $(this).text() );
+  });
+  
+  $(document).on('keyup', function(evt) {
+    if ( (evt.keyCode || evt.which) === 27 ) {
+      $('.dropdown').removeClass('open');
+    }
+  });
+  
+  $(document).on('click', function(evt) {
+    if ( $(evt.target).closest(".dropdown > .caption").length === 0 ) {
+      $('.dropdown').removeClass('open');
+    }
+  });
+  
+});
+
+
+function Utils() {
+
+}
+
+Utils.prototype = {
+    constructor: Utils,
+    isElementInView: function (element, fullyInView, returnObj) {
+        var pageTop = window.scrollY;
+        var pageBottom = pageTop + window.innerHeight;
+        var elementTop = $(element).offset().top;
+        var elementBottom = elementTop + $(element).height();
+
+        if (returnObj) {
+        	returnObj.pageTop = pageTop;
+        	returnObj.pageBottom = pageBottom;
+        	returnObj.elementTop = elementTop;
+        	returnObj.elementBottom = elementBottom;
+        }
+
+        if (fullyInView === true) {
+            return ((pageTop < elementTop) && (pageBottom > elementBottom));
+        } else {
+            return ((elementTop <= pageBottom) && (elementBottom >= pageTop));
+        }
+    }
+};
+
+var Utils = new Utils();
+
+let setLoaded = false;
+
+// We divide the document in pages.
+// Page height is equal to height of the viewport.
+// The zaubarScroll event informs us of page index changes.
+// Each page may have a panel.
+
+document.addEventListener('zaubarScroll', function (e) {
+	const arrow = document.getElementById('scroll-hint');
+	const y = e.detail.currentPageFloatIndex;
+	const dy = e.detail.deltaPageFloatIndex;
+	viewLogicNavbar(y);
+	viewLogicCover(y);
+	viewLogicCredits(y);
+	viewLogicAudio();
+	viewLogicPanelMobile(y, dy);
+	viewLogicPopup();
+
+	if (y > MAGIC_NUMBER_CREDITS) {
+        arrow.style.opacity = 0;
+	} else{
+		arrow.style.opacity = 1;
+	}
+
+});
+
+document.addEventListener('zaubarSetLoading', function (e) {
+	const popBtn = document.getElementById("pop-up-btn");
+	const loadingText = document.getElementById("progress-bar");
+	const value = loadingText.querySelector(".time-percentage"); 
+
+	const stage = e.detail.stage;
+
+	if (stage === 'geometry') {
+		const percent = e.detail.progress * 0.9;
+		value.textContent = percent.toFixed()+ '%';
+	}
+
+	if (stage === 'textures') {
+		const percent = 90 + e.detail.progress * 0.1;
+		value.textContent = percent.toFixed()+ '%';
+	}
+
+	if (stage === 'finish') {
+		setTimeout(() => {
+			popBtn.style.display = "block";
+			loadingText.style.display = "none";
+		}, 500);
+		setLoaded = true;
+	}
+
+});
+
+// Show hide popup with modal and prevent scrolling
+function viewLogicPopup() {
+	// console.log('not implemented');
+}
+
+// 
+function viewLogicPanelMobile(y, dy) {
+
+	const panels = Array.prototype.slice.call(document.getElementsByClassName('content'));
+	const panelSides = panels.map(panel => panel.querySelector('.side'));
+	const panelTops = panelSides.map(panel => panel.querySelector('.top'));
+
+	// console.log('viewLogicPanelMobile not implemented');
+
+}
+
+// Navbar appear after first page
+function viewLogicNavbar(y) {
+
+	if (y > 1) {
+		document.getElementById('navbar-logo').style.display = 'inline';
+		document.getElementById('navbar').style.backgroundColor = '#dbd4a0';
+	} else {
+		document.getElementById('navbar-logo').style.display = 'none';
+		document.getElementById('navbar').style.backgroundColor = 'transparent';
+	}
+}
+
+// Cover head animation
+function viewLogicCover(y) {
+	const beu = document.getElementById('cover-beuys-head');
+	const bg = document.getElementById('cover-background');
+
+	const MAGIC_NUMBER = 0.6;
+
+	// first page (title)
+	if (y < MAGIC_NUMBER) {
+		bg.style.opacity = 1;
+		beu.style.opacity = 1;
+		beu.style.transform = 'translateX(-100%)';
+	}
+	
+	// second page (beuys' head)
+	if (y >= MAGIC_NUMBER && y <= (1 + MAGIC_NUMBER)) {
+		bg.style.opacity = 1;
+		beu.style.opacity = 1;
+		beu.style.transform = 'translateX(' + (-100 + 100 * ((y + (1 - MAGIC_NUMBER)) - 1)) + '%)';
+	}
+
+	if (y > 2) {
+		beu.style.transform = 'translateX(0%)';
+	}
+
+	// after third page background fades out
+	bg.style.opacity = 1 - (y-2);
+
+	// after fourth page beuys' head fades out
+	beu.style.opacity = 1 - (y-3);
+
+	if (y > 4) {
+		beu.style.display = 'none';
+	} else {
+		beu.style.display = 'block';
+	}
+}
+
+// Credits fade in after last object
+function viewLogicCredits(y) {
+
+	const bg = document.getElementById('credits-page-one');
+
+	if (y < MAGIC_NUMBER_CREDITS) {
+		bg.style.background = 'rgba(255,255,255, 0)';
+	}
+
+	// if (y < 73) {
+	// 	bg.style.backdropFilter = 'blur(0px)';
+	// }
+
+	if (y >= MAGIC_NUMBER_CREDITS && y < MAGIC_NUMBER_CREDITS + 1) {
+		bg.style.background = 'rgba(255,255,255,' + ((y - MAGIC_NUMBER_CREDITS) * 0.3) + ')';
+	}
+
+	// if (y >= 73 && y < 75) {
+	// 	bg.style.backdropFilter = 'blur(' + (y - 73) * 5 + 'px)';
+	// }
+
+	// if (y >= 72) {
+	// 	bg.style.backdropFilter = 'blur(' + (66 - y) * 5 + 'px)';
+	// }
+
+}
+
+// Audio helper function
+function pauseAllExcept(audios, audio) {
+	audios.forEach((a, i) => {
+		if (audio != audios[i]) audio.pause();
+	});
+}
+
+// Audio helper function
+function autoplayOrClick(audio, clickElement) {
+	audio.play().catch(error => {
+		if (error.name === 'NotAllowedError') {
+			clickElement.style.display = 'inline';
+			clickElement.style.transform = 'scale(2)';
+			setTimeout(() => clickElement.style.transform = 'scale(1)', 100);
+			setTimeout(() => clickElement.style.transform = 'scale(2)', 200);
+			setTimeout(() => clickElement.style.transform = 'scale(1)', 300);
+		}
+	});
+}
+
+// Audio autoplay logic
+function viewLogicAudio() {
+
+	// If we go here, we autoplay audio
+
+	const panels = my$('.page-three').concat(my$('.content'));
+	const audioContainers = panels.map(panel => panel.querySelector('.audio-player'));
+	const seekbars = panels.map(panel => panel.querySelector('.seekbar'));
+	const audioElements = panels.map(panel => panel.querySelector('audio'));
+	const playButtons = panels.map(panel => panel.querySelector('.play-btn'));
+
+	for (let i = 0; i < panels.length; i++) {
+
+		if (seekbars[i].dataset.userPaused === 'PAUSED') {
+			continue;
+		}
+
+		if (Utils.isElementInView(panels[i])) {
+			if (audioElements[i].paused) {
+				autoplayOrClick(audioElements[i], playButtons[i]);
+				// pauseAllExcept(audioElements, audioElements[i]);
+				audioElements.forEach((audio, index) => {
+					if (i != index) audio.pause();
+				});
+			}
+		}
+	}
+}
+
+// Audio play pause click handler
+function playPauseThisAudio(seekbar) {
+
+	// If we go here, the user clicked the play/pause button
+
+	const thisAudio = seekbar.nextElementSibling;
+
+	const panels = my$('.page-three').concat(my$('.content'));
+	const audioElements = panels.map(panel => panel.querySelector('audio'));
+	const seekbars = panels.map(panel => panel.querySelector('.seekbar'));
+
+	if (thisAudio.paused) {
+		thisAudio.play();
+
+		pauseAllExcept(audioElements, thisAudio)
+
+		seekbar.dataset.userPaused = '';
+	} else { 
+		thisAudio.pause();
+
+		seekbar.dataset.userPaused = 'PAUSED';
+	}
+}
+
+const audioFiles = {
+	'pl': [
+		'00a_Zrozumieć_Beuysa_210428_01.mp3',
+		'01_Joseph_Beuys_210428_01.mp3',
+		'02_Joseph_Beuys_210428_01.mp3',
+		'03_Joseph_Beuys_210428_01.mp3',
+		'04_Joseph_Beuys_210428_01.mp3',
+		'05_Joseph_Beuys_210428_01.mp3',
+		'06_Joseph_Beuys_210428_01.mp3',
+		'07_Joseph_Beuys_210428_01.mp3',
+		'08_Joseph_Beuys_210428_01.mp3',
+	],
+	'lt': [
+		'n00-1a.mp3',
+		'n00-2a.mp3',
+		'n01.mp3',
+		'n02.mp3',
+		'n03.mp3',
+		'n04.mp3',
+		'n05.mp3',
+		'n06.mp3',
+		'n07.mp3',
+		'n08.mp3',
+	],
+	'de': [
+		'00Beuysverstehen.mp3',
+		'01SozialePlastik.mp3',
+		'02ProjektWestmensch.mp3',
+		'03Chef.mp3',
+		'04Schlitten.mp3',
+		'05DieRevolution.mp3',
+		'06KapitalRaum.mp3',
+		'077000Eichen.mp3',
+		'08Capri-Batterie.mp3',
+	],
+	'en': [
+	    '00Understanding-Beuys.mp3',
+		'01-Social-Plastic.mp3',
+		'02-Project-Westmensch.mp3',
+		'03-Chef.mp3',
+		'04-Sledge.mp3',
+		'05-The-Revolution.mp3',
+		'06-The-Kapital.mp3',
+		'07-7000-Eichen.mp3',
+		'08-Capri-Battery.mp3',
+	],
+	'cz': [
+	    '00.mp3',
+		'01.mp3',
+		'02.mp3',
+		'03.mp3',
+		'04.mp3',
+		'05.mp3',
+		'06.mp3',
+		'07.mp3',
+		'08.mp3',
+	],
+	'hu': [
+	    '00intro.mp3',
+		'1.mp3',
+		'2.mp3',
+		'3.mp3',
+		'4.mp3',
+		'5.mp3',
+		'6.mp3',
+		'7.mp3',
+		'8.mp3',
+	]
+}
+
+function setAudioLanguage(lang) {
+	console.log('change audio to ' + lang);
+	const extraText = document.getElementById("cover-extra-text");
+
+
+    // Extra heading on other language except german
+	if(lang === "de"){
+		extraText.style.display = 'none';
+	} else {
+		extraText.style.display = 'block';
+	}
+
+
+	const audioElements = document.querySelectorAll('.aud');
+	for (let i = 0; i < audioElements.length; i++) {
+		const source = audioElements.item(i).querySelector('source');
+
+		console.log('Load audio i=' + i + ': ' +  'Assets/Audios/' + lang + '/' + audioFiles[lang][i]);
+
+		source.src = 'Assets/Audios/' + lang + '/' + audioFiles[lang][i];
+
+		audioElements.item(i).load();		
+	}
+}
+
+function rewindThisAudio(element) {
+	const audioElement = element.nextElementSibling.nextElementSibling;
+	audioElement.currentTime -= 10;
+}
+
+function forwardThisAudio(element) {
+	const audioElement = element.previousElementSibling;
+	audioElement.currentTime += 10;
+}
+
+function updateThisAudio(audioElement) {
+	const progressElement = audioElement.previousElementSibling.querySelector('.progress');
+	const timeElement = audioElement.previousElementSibling.querySelector('.time');
+	const D = audioElement.duration;
+	const t = audioElement.currentTime;
+	progressElement.style.width = '' + (t / D * 100).toFixed() + '%';
+	timeElement.textContent = getTimeCodeFromNum(t);
+}
+
+function resetThisAudio(audioElement) {
+	audioElement.parentElement.querySelector('.pause-btn').style.display = 'none';
+	audioElement.parentElement.querySelector('.play-btn').style.display = 'inline';
+	audioElement.parentElement.querySelector('.seekbar').dataset.userPaused = 'PAUSED';
+}
+
+function acceptAutoplay() {
+	document.getElementById('pop-up').style.display = 'none';
+	viewLogicAudio();
+}
+
+// Turn 128 seconds into 2:08
+function getTimeCodeFromNum(num) {
+	let seconds = parseInt(num);
+	let minutes = parseInt(seconds / 60);
+	seconds -= minutes * 60;
+	const hours = parseInt(minutes / 60);
+	minutes -= hours * 60;
+
+	if (hours === 0) return `${minutes}:${String(seconds % 60).padStart(2, 0)}`;
+	
+	return `${String(hours).padStart(2, 0)}:${minutes}:${String(seconds % 60).padStart(2, 0)}`;
+}
+
+function scrollOnePage() {
+	window.scrollBy({ 
+		top: window.innerHeight, // could be negative value
+		left: 0, 
+		behavior: 'smooth'
+	});
+}
+
+function my$(selector) {
+	return Array.prototype.slice.call(document.querySelectorAll(selector));
+}
+
+$(document).ready(function() {
+
+	// Listen to language clicks
+
+	$('.dropdown .list').children().each((i, e) => {
+		e.addEventListener('click', translate);
+	});
+
+	// Set default language
+
+	setLanguage(getCurrentLanguage());
+
+	// Listen to copyright clicks
+
+	my$('.copyright-container').forEach(copyright => {
+		copyright.addEventListener('click', event => {
+			const overlayDiv = copyright.querySelector('.overlay');
+			const modalDiv = copyright.querySelector('.modal');
+			const closeBtn = copyright.querySelector('.modal-close-btn');
+			const openBtn = copyright.querySelector('.copyright-btn');
+
+			if (event.target == closeBtn) {
+				overlayDiv.classList.remove('is-visible');
+				modalDiv.classList.remove('is-visible');
+				closeBtn.classList.remove('is-visible');
+			} else {
+				overlayDiv.classList.add('is-visible');
+				modalDiv.classList.add('is-visible');
+				closeBtn.classList.add('is-visible');
+				console.assert(event.target == openBtn);
+			}
+		})
+	});
+
+	function setLanguage(lang) {
+
+		$.MultiLanguage('language.json', lang);
+
+		setAudioLanguage(lang);
+
+		const moreButtons = Array.prototype.slice.call(document.querySelectorAll('.moreBtn'));
+
+		moreButtons.forEach((e, i) => {
+
+			let dots = e.parentElement.parentElement.querySelector(".dots");
+
+			if (dots.style.display === "none") {
+				e.textContent = TRANSLATIONS_LESS[lang];
+			} else 
+			{
+				e.textContent = TRANSLATIONS_MORE[lang];
+			}
+		});
+
+		document.getElementById('arrow-text').textContent = TRANSLATIONS_SCROLLING[lang];
+
+	}
+
+	function translate(event) {
+		const lang = event.target.textContent.toLowerCase();
+		setLanguage(lang);
+	}
+
+});
+
+
+// Handler for "show more" clicks (listener is registered in HTML)
+
+function showMore(element) {
+  let dots = element.parentElement.parentElement.querySelector(".dots");
+  let moreText = element.parentElement.parentElement.querySelector(".more");
+  let btnText = element.parentElement.parentElement.querySelector(".moreBtn");
+
+  if (dots.style.display === "none") {
+	dots.style.display = "inline";
+	moreText.style.display = "none";
+	btnText.textContent = TRANSLATIONS_MORE[getCurrentLanguage()];
+  } else {
+	dots.style.display = "none";
+    btnText.textContent = TRANSLATIONS_LESS[getCurrentLanguage()];
+    moreText.style.display = "inline";
+  }
+}
+
+</script>
+  
+</head>
+
+
+
+
+
+
+<!-- The script part is over, now starts the content part -->
+
+
+
+
+
+
+<body>
+
+
+
+<!-- Popup to enable audio autoplay -->
+
+<div class="main-content-pop-up" id="pop-up">
+
+	<div class="pop-up">
+		<img class="pop-logo" src="Assets/Bueys-logo.png" alt="">
+		<p class="popup-content">Dies ist ein audiovisueller Rundgang. Für den besten Klang empfehlen wir dir Kopfhörer.</p>
+		<img class="headphone-logo"src="Assets/icons/Headphones.svg" alt="">
+
+		<div id="progress-bar" style="display: block">
+			<div class="loading-text">
+					<div class="letter-holder">
+						<div class="l-1 letter">L</div>
+						<div class="l-2 letter">o</div>
+						<div class="l-3 letter">a</div>
+						<div class="l-4 letter">d</div>
+						<div class="l-5 letter">i</div>
+						<div class="l-6 letter">n</div>
+						<div class="l-7 letter">g</div>
+						<div class="l-8 letter">.</div>
+						<div class="l-9 letter">.</div>
+						<div class="l-10 letter">.</div>
+					</div>
+				</div>
+			<div class="time-percentage">0<span>%</span></div>
+		</div>
+
+		<div class="pop-up-btn" id="pop-up-btn" style="display: none" onclick="acceptAutoplay(this)">
+			<span id="loaded">OK</span>
+		</div>
+	</div>
+
+</div>
+
+
+
+<!-- Canvas to render 3D content -->
+
+<div id="webglContainer">
+	<canvas id="webglCanvas">
+	</canvas>
+</div>
+
+
+
+<!-- Video used in 3D content -->
+
+<video
+id="beuysVideo" 
+style="display:none" 
+preload="metadata"
+onloadedmetadata="console.log('video with ' + this.duration.toFixed() + 's')"
+poster="Assets/Beuys/ezgif-2-4239ef5aba52.gif"
+loop 
+playsinline
+muted>
+	<source src="Assets/Beuys/1969Soziale_plastik.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+</video>
+
+
+
+<!-- Scroll container for panels -->
+
+<div id="zaubar" >
+	
+
+	<!-- NAVBAR-->
+	<div id="navbar" class="navbar">
+
+
+		<!-- LOGO -->
+		<img id="navbar-logo" class="logo" src="Assets/Bueys-logo.png" alt=""><img>
+
+		<!-- LANGUAGE-->
+		<div class="nav-controls">
+				<a class="presskit" target="_blank" href="https://tinyurl.com/beuys-verstehen">Presskit</a>
+				<div class="dropdown">
+					<div class="caption">DE</div>
+					<div class="list">
+						<div class="item">DE</div>
+						<div class="item">PL</div>
+						<div class="item">EN</div>
+						<div class="item">CZ</div>
+						<div class="item">SK</div>
+						<div class="item">SL</div>
+						<div class="item">HU</div>
+						<div class="item">LT</div>
+					</div>
+				</div>
+				<img class="arrow-small" src="Assets/icons/arrow-small.svg" />
+		</div>
+	</div>
+
+	<!-- Arrow Animating-->
+	<div class="wrap-arrow" id="scroll-hint">
+		<p class="arrow-text" id="arrow-text">Scrollen Sie weiter</p>
+		<img src="Assets/icons/arrow-scroll.svg" id="arrow" class="animated bounce" onclick="scrollOnePage()">
+	</div>
+	
+	<div id="cover" class="cover-overlay">
+
+		<!-- Title page -->
+		<div id="01_Cover_1" class="container">
+
+			<div class="goethe">
+				<img src="Assets/goethe-logo.png"> <span class="text i18n presents" id="cover_goethe_text">präsentiert</span>
+			</div>
+
+			<div class="beuysverstehen">
+				<img src="Assets/Beuys-logo-large.png">
+				<span id="cover-extra-text">Zrozumieć Beuysa</span>
+			</div>
+
+			<div class="virtualgallery">
+			<span class="text i18n virtualGallery" id="cover_virtual_gallery">DIE VIRTUELLE GALERIE</span>
+			</div>
+
+			<div class="logos">
+				<div class="co-logo">
+
+					<span class="one" >
+						<p id="cover_beuys_logo_text">In Kooperation mit</p>
+						<img  src="Assets/beuys2021-logo.png">
+					</span>
+
+					<span class="two">
+						<p id="cover_beuys_producer">Produziert von</p>
+						<a target="_blank" href="https://zaubar.com/" ><img  src="Assets/zaubar-logo.png"></a> 
+					</span>
+
+				</div>
+				
+				<span class="appstores">
+					<span class="text i18n appstore" id="cover_beuys_appstore">Lade auch die App herunter</span><br>
+					<a target="_blank" href="https://apps.apple.com/us/app/beuys-verstehen-ar/id1565507516"><img src="Assets/apple.png"></a>  
+					<a target="_blank" href="https://play.google.com/store/apps/details?id=com.zaubar.beuysar"><img src="Assets/google.png"></a>  
+				</span>
+			</div>
+
+
+			
+			<!-- logos on mobile -->  
+			<span class="appstores-mobile">
+				<span class="text" id="cover_beuys_appstore">Lade auch die App herunter</span><br>
+				<a target="_blank" href="https://apps.apple.com/us/app/beuys-verstehen-ar/id1565507516"><img src="Assets/apple.png"></a>  
+				<a target="_blank" href="https://play.google.com/store/apps/details?id=com.zaubar.beuysar"><img src="Assets/google.png"></a>  
+			</span>
+			
+		</div>
+			
+		<!-- Beuys' head -->
+		<div class="page-two">
+				<div class="beuys-head">
+						<img id="cover-beuys-head" src="./SVG/beuys-head.svg" alt="">
+				</div>
+		</div>
+
+		<!-- Empty page -->
+		<div id="01_Cover_2" class="empty-page"></div>
+
+		<!-- Cover Text -->
+		<div id="01_Cover_3" class="page-three">
+
+				<div class="beuys-head-text">
+					<div class="beuys-head-top">
+						<div id="beuys_head_main_heading" class="beuys-head-heading">Beuys verstehen</div>	
+                        <!-- Audio on beuys head -->
+						<div class="audio-player">
+
+								<div class="audio-controls">
+		
+									<!-- Please do not change the order of the elements because JS relies on it -->
+									<span onclick="rewindThisAudio(this)">
+										<img src="Assets/icons/rewind-beige.svg" alt="" class="control-btn audio-control-previous">
+									</span>
+		
+									<span class="seekbar" onclick="playPauseThisAudio(this)">
+										<i class="pause-btn" style="display:none">
+											<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+												<path fill="#dbd4a0" fill-rule="evenodd" d="M0 0h6v24H0zM12 0h6v24h-6z"/>
+											</svg>
+										</i>
+										<i class="play-btn" style="display:none">
+											<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+												<path fill="#dbd4a0" fill-rule="evenodd" d="M18 12L0 24V0"/>
+											</svg>
+										</i>
+										<i class="time">0:00</i>
+										<span class="progress"></span>
+										
+									</span>
+		
+									<audio class="aud" preload="metadata" 
+									onloadedmetadata="console.log('audio with ' + this.duration.toFixed() + 's')" 
+									onplay="this.parentElement.querySelector('.play-btn').style.display = 'none'; this.parentElement.querySelector('.pause-btn').style.display = 'inline'"
+									onpause="this.parentElement.querySelector('.pause-btn').style.display = 'none';  this.parentElement.querySelector('.play-btn').style.display = 'inline'"
+									ontimeupdate="updateThisAudio(this)" 
+									onended="resetThisAudio(this)">
+
+										<source src="Assets/Audios/de/00Beuysverstehen.mp3" type="audio/mpeg">
+
+									</audio>
+		
+									<span onclick="forwardThisAudio(this)">
+										<img src="Assets/icons/forward-beige.svg" alt="" class="control-btn audio-control-next">
+									</span>
+		
+								</div>
+		
+						</div>
+					</div>
+
+					<div class="content-panel">
+				
+						<div class="paragraph_container">
+
+										<div class="cover-head-text">
+										    <p class="paragraph_text">
+													<span id="beuys_head_text_one">
+															Joseph Beuys war Zeichner, Bildhauer, Aktions- und Installationskünstler, Lehrer, Politiker, und Aktivist. Neben
+															Marcel Duchamp,
+															John Cage und Andy Warhol zählt er zu den bedeutendsten Künstlern des 20. Jahrhunderts. Beuys’ Wirken veränderte das
+															Wesen, die Materialität,
+															die Sprache, die Wahrnehmung der Grenzen und Aufgaben der Kunst grundlegend. Geboren wurde er 1921 in Krefeld, er
+															wuchs auf in Kleve und starb
+															1986 in Düsseldorf. Doch wer war Joseph Beuys wirklich? Was ist der erweiterte Kunstbegriff? Und die Plastische
+															Theorie? Warum dachte Beuys,
+															dass man nach den Prinzipien der Plastik die Welt verändern könne? Was macht ihn so hochumstritten? So brisant und
+															aktuell?
+													</span>
+													<br>
+													<br>
+													<span class="subheading-inner" id="beuys_head_text_subheading">Die Debatte um Beuys</span>
+													<br>
+													<br>
+													<span id="beuys_head_text_two">
+															Beuys’ Versuche, seine Beteiligung am Nationalsozialismus zu verarbeiten, seine Auseinandersetzung mit seinen Kriegserfahrungen als Soldat sowie seine 
+															Bemühungen, nach seiner Rückkehr – als Teil einer moralisch kompromittierten Gesellschaft – seine Rolle zu finden, hatten einen wesentlichen Einfluss 
+															auf seine Werkentwicklung. Er nahm sich selbst als Modell der notwendigen inneren Transformation und setzte sich zum Ziel, eine radikale Demokratisierung 
+															der Gesellschaft einzuleiten. Inwieweit er die angestrebte innere Verwandlung tatsächlich realisierte, ist bis heute heftig umstritten.<span class="dots">...</span>
+													</span>	
+													<div class="more" >
+														<span id="beuys_head_text_see_more">
+															Die Vehemenz dieser die Gesamtrezeption des erweiterten Kunstbegriffs bedingenden Debatte zeigte sich zuerst 1979, als Beuys im New Yorker 
+															Guggenheim Museum seine erste große Retrospektive präsentierte. Damals stieß der Kunsthistoriker Benjamin Buchloh die Diskussion an. 
+															Er fragte sich, ob Beuys mit seiner Selbstdarstellung, seiner Material- und Bildsprache wie mit seiner Erkundung des Mythischen nicht 
+															die Ästhetik und Ideologie des Nationalsozialismus fortsetze. Seitdem steht das 'Problem Beuys' im Raum.
+															<br>
+															<br>
+															Historiker:innen wie Rosalind Krauss, Walter Grasskamp, Beat Wyss oder Nicole Fritz haben sich mit diesen Fragen auseinandergesetzt. 
+															Zuletzt intensivierte sich die Debatte 2013 in Reaktion auf die Veröffentlichung der beuysskeptischen Biografie von Hans Peter Riegel, 
+															die der Autor anlässlich des 100-jährigen Geburtstags des Künstlers um einen vierten Band ergänzte. Im Rahmen des Beuys-Jubiläums widmen 
+															sich viele Veranstaltungen, Diskussionsforen und Publikationen der Aufarbeitung diesem Problemfeld.
+															<br>
+															<br>
+															Die Debatte kreist um Beuys’ Auseinandersetzung mit dem Nationalsozialismus, seines freiwilligen Kriegsdienstes und seiner Positionierung 
+															zu Auschwitz. Nach seiner Schaffens- und Lebenskrise in der Mitte der 1950er-Jahre, während der Beuys unter anderem das Tagebuch der Anne 
+															Frank las, wurden ihm die ungeheuerlichen Verbrechen des Nationalsozialismus und seine Mitschuld bewusst. 1958 beteiligte er sich als 
+															einziger deutscher Künstler an einem Wettbewerb für ein Mahnmal in Auschwitz-Birkenau. Der Wettbewerb scheiterte. In den folgenden 
+															Jahren entstand als neuer Versuch, sich mit diesem Thema zu befassen, die Vitrine Auschwitz-Demonstration, die Beuys erstmals 1967 in einer Ausstellung zeigte. 
+															<br>
+															<br>
+															Beuys war bemüht mit »den weitergehenden Sachen eben etwas aufzubereiten, was das, was dieses schreckliche Bild, was sich im Bilde nicht darstellen 
+															läßt, sondern was nur dargestellt wurde in seinem eigentlichen Vorgang während es geschah, daß man das überhaupt nicht übersetzen kann in ein Bild. 
+															Daß das, nun sagen wir einmal, erinnert werden kann in seinem positiven Gegenbilde, d. h., indem was wirklich aus der Welt geschafft wird beim Menschen. 
+															Der Rest dieser ganzen Unmenschlichkeiten, daß das überwunden wird.«*
+															<br>
+															<br>
+															Sein 1964 gefasster Entschluss, sein Privatleben in einem ungetrennten Lebens- und Werklauf aufzuheben und sich als eine öffentlich sprechende, politische 
+															Figur zu verstehen, ist ein erstes, gegen das Schweigen und den »Rest« der deutschen Gesellschaft gerichtetes Kommunikationsmodell. In geistigen und 
+															materiellen Sinn- und Denkbildern versuchte Beuys, ein anderes Denken und Handeln zu evozieren. Dennoch empfinden viele Menschen manche seiner 
+															Aussagen problematisch, insofern er Auschwitz nicht als singuläres Ereignis behandelte und das Trauma der Opfer mit dem der Täter zu vermengen schien.
+															<br>
+															<br>
+															In einem Fernsehinterview etwa lädt er die Zuschauer:innen ein, ihn als »eine Art Märchenerzähler« zu begreifen, dessen Erzählungen über das Rationale 
+															weit hinausreichen und »eine viel tiefere Wirklichkeit von Weltinhalt« zum Klingen bringen. In diesem Sinne hat Beuys seiner Biografie autofiktive 
+															Elemente hinzugefügt, wie die Erzählung, nach seinem Absturz 1944 über der Krim eine »märchenhafte« Rettung durch nomadisierende Tataren erlebt 
+															zu haben. Von der Kritik wird die Ambiguität und die autopoetische Transformation realer Vorgänge als Verdrängung der eigenen Schuld wahrgenommen.
+															<br>
+															<br>
+															* Max Reithmann im Gespräch mit Joseph Beuys,1982. Zit. nach: Eva Beuys, Wenzel Beuys, Block Beuys, München 1990, S. 184.  
+														</span>
+													</div>
+											</p>
+											
+										</div>
+
+                                        <!--show more button -->
+										<div class="link-show-more-cover">
+												<a onclick="showMore(this)" id="0" class="moreBtn">Mehr erfahren</a>
+										</div>
+									  
+						</div>
+					</div> 
+			
+					
+				</div>
+		</div>
+			
+	
+	</div>
+
+	<!-- Cover background -->
+	<div id="cover-background" class="cover-container">
+
+		<div class="cover-background" id="cover-background">
+			<img src="SVG/background.svg" alt="">
+		</div>
+
+		<div class="main-bar"></div>
+	</div>
+
+	<!-- Empty page -->
+	<div id="01_Cover_4" class="empty-page"></div>
+
+	<!-- Text Panel First -->
+	<div id="02_Beuys_Video_1" class="content">
+
+
+			
+		<div class="side">
+				<div class="top">
+
+					<div class="copyright-container">
+						<!-- pop up for copyright -->
+						<button class="copyright-btn" >©</button>
+					
+						<div class="overlay"></div>
+						<div class="modal">
+							<button class="modal-close-btn">x</button>
+							<div id="panel_one_credits">Lutz Mommartz, Soziale Plastik, 1969 </div>
+						</div>
+					</div>
+                    
+
+					<div id="panel_one_main_heading" class="main-heading">soziale plastik</div>
+
+					<div class="audio-player">
+
+						<div class="audio-controls">
+
+							<!-- Please do not change the order of the elements because JS relies on it -->
+							<span onclick="rewindThisAudio(this)">
+								<img src="Assets/icons/rewind.svg" alt="" class="control-btn audio-control-previous">
+							</span>
+
+							<span class="seekbar" onclick="playPauseThisAudio(this)">
+								<i class="pause-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M0 0h6v24H0zM12 0h6v24h-6z"/>
+									</svg>
+								</i>
+								<i class="play-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M18 12L0 24V0"/>
+									</svg>
+								</i>
+								<i class="time">0:00</i>
+								<span class="progress"></span>
+								
+							</span>
+
+							<audio class="aud" preload="metadata" 
+							onloadedmetadata="console.log('audio with ' + this.duration.toFixed() + 's')" 
+							onplay="this.parentElement.querySelector('.play-btn').style.display = 'none'; this.parentElement.querySelector('.pause-btn').style.display = 'inline'"
+							onpause="this.parentElement.querySelector('.pause-btn').style.display = 'none';  this.parentElement.querySelector('.play-btn').style.display = 'inline'"
+							ontimeupdate="updateThisAudio(this)" 
+							onended="resetThisAudio(this)">
+								<source src="Assets/Audios/de/01SozialePlastik.mp3" type="audio/mpeg">
+							</audio>
+
+							<span onclick="forwardThisAudio(this)">
+								<img src="Assets/icons/forward.svg" alt="" class="control-btn audio-control-next">
+							</span>
+
+						</div>
+						
+					</div>
+
+				    
+
+				</div>
+				
+				<div class="line"></div>
+
+				<div class="mobile-content">
+
+						<div class="content-panel">
+		
+								<div class="paragraph_container">
+			
+										<p class="read-more-wrap paragraph_text">
+												<span id="panel_one_show_para">
+														Joseph Beuys schaut uns an: hochkonzentriert, verletzlich, musternd, menschlich. 100 Jahre nach seiner Geburt, 50 Jahre nach der Entstehung dieses Films, 
+														35 Jahre nach seinem Tod. Im Anblick des Jahrhundertkünstlers stellt sich die Frage, wen wir vor uns haben. War Beuys, wie manche sagen, ein Pseudodemokrat, 
+														ein Scharlatan, ein Lügner? Oder war er ein Künstler, der sich für die radikaldemokratische Transformation der Gesellschaft einsetzte? Was wollte der Mensch, 
+														der uns so herausfordernd anblickt?<span class="dots">...</span>
+												</span>
+												<div class="more">
+													<span id="panel_one_more_one">
+															In den kaum wahrnehmbaren Bewegungen seiner Augen wie seiner Gesichtszüge liegt der Beginn einer Antwort. Denn sie zeugen davon, dass er nachdenkt, 
+															dass er sich etwas vorstellt, dass er Gedanken bildet und Ideen formt. Diesen freien, kreativen Prozess, der unser Menschsein ausmacht, verstand 
+															Beuys als Plastik, als Kunst im erweiterten Sinne. Bereits im Denken beginnen wir, unsere schöpferische Fähigkeit einzusetzen und dabei uns und 
+															unsere Umwelt mitzugestalten.
+															<br>
+															<br>
+															Gerade diese Fähigkeit macht jeden Menschen, so Beuys, zu einer Künstlerin, zu einem Künstler. Sie ermöglicht uns allen, die Gesellschaft als 
+															»Soziale Plastik« grundlegend zu verändern, indem wir uns aktiv einbringen. Die Herausforderung liegt darin, diese Kreativität für und nicht 
+															gegen die Menschen anzuwenden: individuell wie kollektiv.
+															<br>
+															<br>
+															Wie man sich konkret einer solchen Herausforderung stellen könnte, erforschte Beuys ununterbrochen. Alle Kunstwerke, die dabei entstanden, 
+															ob Zeichnungen oder Skulpturen, Aktionen oder Modellorganisationen betrachtete er als Teil seiner »Freiheitswissenschaft«. Dieses Forschungsvorhaben, 
+															dieses Gesamtkunstwerk nannte er die Plastische Theorie.
+															<br>
+															<br>
+															Kein geringeres Ziel fasste Beuys bei der Ausarbeitung seines erweiterten Kunstbegriffs ins Auge, als die Ideale der Französischen 
+															Revolution weltweit einzulösen: Freiheit, Gleichheit, Brüderlichkeit. 
+													</span>
+													<span id="panel_one_more_two">
+															Aus der kalten, nationalsozialistisch geprägten Gesellschaft, in der Beuys groß geworden war und an der er sich aktiv beteiligt hatte, 
+															wollte er eine warme, menschenfreundliche, demokratische Gesellschaft allmählich entstehen lassen: im gemeinsamen Gespräch und in Zusammenarbeit 
+															mit allen Menschen.
+															<br>
+															<br>
+															Seine persönliche Transformation bildete für ihn dabei den Ausgangspunkt.
+														</span>
+												</div>
+										</p>
+			
+								</div>
+							</div> 
+
+				
+							<div class="link-show-more">
+								<a onclick="showMore(this)" id="1" class="moreBtn">Mehr erfahren</a>
+							</div>
+			
+	
+							<div class="footer">
+								<div class="line-footer"></div>
+								<div class="footer_text" id="panel_one_credits">Lutz Mommartz, Soziale Plastik, 1969 </div>
+							</div>
+
+					 </div>
+		       </div>
+
+		<div class="page"></div>
+
+	</div>
+
+	<div id="02_Beuys_Video_2" class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div id="03_Westmensch_1" class="empty-page"></div>
+	<div id="03_Westmensch_2" class="empty-page"></div>
+	<div id="03_Westmensch_4" class="empty-page"></div>
+	<div id="03_Westmensch_5" class="empty-page"></div>
+
+	<!-- Text Panel Second -->
+	<div id="03_Westmensch_6" class="content">
+		     
+			
+		<div class="side">
+				<div class="top">
+
+
+					<div class="copyright-container">
+					    <!-- pop up for copyright -->
+						<button class="copyright-btn" >©</button>
+
+						<div class="overlay"></div>
+						<div class="modal">
+							<button class="modal-close-btn">x</button>
+							<div id="panel_two_credits">Joseph Beuys, 4 Bücher aus »Projekt Westmensch« 1958, 1958–1964</div>
+							<p class="copyright-text">Faksimilereproduktion, Edition Schellmann, München und New York, 1992
+									Foto: © Schellmann Art und VG Bild-Kunst, Bonn 2021</p>
+						</div>
+					</div>
+
+					<div id="panel_two_main_heading" class="main-heading">projekt westmensch</div>
+
+					<div class="audio-player">
+
+						<div class="audio-controls">
+
+							<!-- Please do not change the order of the elements because JS relies on it -->
+							<span onclick="rewindThisAudio(this)">
+								<img src="Assets/icons/rewind.svg" alt="" class="control-btn audio-control-previous">
+							</span>
+
+							<span class="seekbar" onclick="playPauseThisAudio(this)">
+								<i class="pause-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M0 0h6v24H0zM12 0h6v24h-6z"/>
+									</svg>
+								</i>
+								<i class="play-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M18 12L0 24V0"/>
+									</svg>
+								</i>
+								<i class="time">0:00</i>
+								<span class="progress"></span>
+								
+							</span>
+
+							<audio class="aud" preload="metadata" 
+							onloadedmetadata="console.log('audio with ' + this.duration.toFixed() + 's')" 
+							onplay="this.parentElement.querySelector('.play-btn').style.display = 'none'; this.parentElement.querySelector('.pause-btn').style.display = 'inline'"
+							onpause="this.parentElement.querySelector('.pause-btn').style.display = 'none';  this.parentElement.querySelector('.play-btn').style.display = 'inline'"
+							ontimeupdate="updateThisAudio(this)" 
+							onended="resetThisAudio(this)">
+
+								<source src="Assets/Audios/de/02ProjektWestmensch.mp3" type="audio/mpeg">
+							</audio>
+
+							<span onclick="forwardThisAudio(this)">
+								<img src="Assets/icons/forward.svg" alt="" class="control-btn audio-control-next"">
+							</span>
+
+						</div>
+
+					</div>
+
+				</div>
+				
+				<div class="line"></div>
+
+				<div class="mobile-content">
+
+				
+			
+				<div class="content-panel">
+			
+					<div class="subheading">
+							<p id="panel_two_main_subheading">Wie hat Joseph Beuys seine Plastische Theorie entwickelt? Wie verhält sich seine Theorie zu seiner Vergangenheit? Und zur Zukunft? Welche Elemente fasst er unter dem »Projekt Westmensch« zusammen?</p>
+					</div>
+			
+					<div class="paragraph_container">
+						<!-- <h4 id="panel_one_year">1920</h4> -->
+
+						<p class="read-more-wrap paragraph_text">
+								<span id="panel_two_show_para">
+										Beuys verstand die 4 Bücher aus: »Projekt Westmensch« als »neue Biographie« und in gewisser Hinsicht als sein erstes Manifest. Für ihn stand die Arbeit, die in diesen Kladden dokumentiert ist, 
+										am Beginn seiner persönlichen und künstlerischen Transformation.<span class='dots'>...</span>
+								</span>
+								<div class="more">
+									<span id="panel_two_more_one">
+									    lHier begann sein erweiterter Kunstbegriff, der auf die Kreativität von allen Menschen setzt, Gestalt anzunehmen. Seine »Forschung« geschah nicht linear, sondern entwickelte sich 
+										gleichzeitig und assoziativ auf verschiedenen Ebenen.
+										<br>
+										<br>
+										Neben Zeichnungen, Skizzen zu plastischen Arbeiten, naturwissenschaftlichen Formulierungen, Materialauflistungen und Alltagsnotizen finden sich dort vor allem kurze Sätze und 
+										formelhaft verkürzte Aussagen. Viele davon sind zu Schlüsselbegriffen in Beuys’ Werk geworden. Das wichtigste Beispiel ist die umfassende Formel »Plastik = Alles«.
+										<br>
+										<br>
+										Die vier Kladden sind nicht als ein abgeschlossenes Werk zu verstehen, sondern als ein Projekt, als eine offene Suche nach einer neuen Begrifflichkeit, 
+										die sich dem »Westmenschen« nur dann erschließen könne, wenn er seinen Blick »ostwärts« richte, wenn er die in der abendländischen Tradition ausgebildete 
+										diametrale Gegenüberstellung von Kunst und Wissenschaft zu überwinden suche.<br><br>Projekt Westmensch war nur der Beginn von Beuys’ »Langzeitforschungsprojekts« 
+										zum erweiterten Kunstbegriff. Rund dreißig Jahre lang beschäftigte er sich mit der Frage, worin der erweiterte Kunstbegriff genau bestehe, worauf er fuße, wie er 
+										einzuordnen und anzuwenden sei. Diese neue Kunstform erkundete, erarbeitete und erläuterte er bis zu seinem Tod ununterbrochen in zahlreichen Medien.
+									</span>
+									<span id="panel_two_more_two">
+											Dazu zählen Zeichnungen, Skulpturen und Environments, Aktionen, Vitrinen und Ausstellungen, Vorträge, Interviews und Gespräche, Podiumsdiskussionen, Partituren und Prosastücke, 
+											Manifeste und Multiples sowie in mehrere von ihm mitgegründete Modellorganisationen, darunter die Deutschen Studentenpartei, die Organisation für Direkte Demokratie durch Volksabstimmung, 
+											die Freie Internationale Universität und die politische Partei DIE GRÜNEN.
+											<br>
+											<br>
+											Zwar sind alle Werke in sich geschlossene Einheiten, doch für Beuys waren alle Teil des einen, alles übergreifenden Gesamtkunstwerks. 
+											Spätestens ab 1968 fasste er sie unter dem performativen Aphorismus »Jeder Mensch ist ein Künstler« zusammen. 
+									</span>
+									<div class="link_ext">
+											<a class="external_link" target="_blank" href="https://www.youtube.com/watch?v=wpAkXQOtQkg" id="panel_two_external_link">Link</a>
+										</div>
+								</div>
+						</p>
+						   
+				
+					</div>
+				</div> 
+				
+				
+				<div class="link-show-more">
+					<a onclick="showMore(this)" id="2" class="moreBtn">Mehr erfahren</a>
+				</div>
+			
+	
+				<div class="footer">
+					<div class="line-footer"></div>
+					<div class="footer_text" id="panel_two_credits">Joseph Beuys, 4 Bücher aus »Projekt Westmensch« 1958, 1958–1964</div>
+					<div class="footer_text">Faksimilereproduktion, Edition Schellmann, München und New York, 1992
+							Foto: © Schellmann Art und VG Bild-Kunst, Bonn 2021</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="double-page"></div>
+	
+	</div>
+
+	<div id="03_Westmensch_7" class="empty-page"></div>
+	<div id="03_Westmensch_8" class="empty-page"></div>
+
+	<!-- Text Panel Third -->
+	<div id="04_Der_Chef_1" class="content">
+			
+		<div class="side">
+				<div class="top">
+						
+						<div class="copyright-container">
+							<!-- pop up for copyright -->
+							<button class="copyright-btn" >©</button>
+						
+							<div class="overlay" ></div>
+							<div class="modal" >
+								<button class="modal-close-btn">x</button>
+								<div id="panel_three_credits">Joseph Beuys, DER CHEF THE CHIEF. Fluxus Gesang, 1964</div>
+								<p class="copyright-text">© Bayerische Staatsbibliothek München/STERN-Fotoarchiv/Jürgen Müller-Schneck, VG
+									Bild-Kunst, Bonn 2021</p>
+							</div>
+						</div>
+					    
+
+
+					<div id="panel_three_main_heading" class="main-heading">chef</div>
+
+					<div class="audio-player">
+
+						<div class="audio-controls">
+
+							<!-- Please do not change the order of the elements because JS relies on it -->
+							<span onclick="rewindThisAudio(this)">
+								<img src="Assets/icons/rewind.svg" alt="" class="control-btn audio-control-previous">
+							</span>
+
+							<span class="seekbar" onclick="playPauseThisAudio(this)">
+								<i class="pause-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M0 0h6v24H0zM12 0h6v24h-6z"/>
+									</svg>
+								</i>
+								<i class="play-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M18 12L0 24V0"/>
+									</svg>
+								</i>
+								<i class="time">0:00</i>
+								<span class="progress"></span>
+								
+							</span>
+
+							<audio class="aud" preload="metadata" 
+							onloadedmetadata="console.log('audio with ' + this.duration.toFixed() + 's')" 
+							onplay="this.parentElement.querySelector('.play-btn').style.display = 'none'; this.parentElement.querySelector('.pause-btn').style.display = 'inline'"
+							onpause="this.parentElement.querySelector('.pause-btn').style.display = 'none';  this.parentElement.querySelector('.play-btn').style.display = 'inline'"
+							ontimeupdate="updateThisAudio(this)" 
+							onended="resetThisAudio(this)">
+							
+								<source src="Assets/Audios/de/03Chef.mp3" type="audio/mpeg">
+							</audio>
+
+							<span onclick="forwardThisAudio(this)">
+								<img src="Assets/icons/forward.svg" alt="" class="control-btn audio-control-next"">
+							</span>
+
+						</div>
+
+					</div>
+
+				</div>
+				
+				<div class="line"></div>
+				<div class="mobile-content">
+				<div class="content-panel">
+			
+					<div class="subheading">
+							<p id="panel_three_main_subheading">Mit welchen Mitteln versucht Beuys, seine Vorstellung der individuellen und in der Folge der gesellschaftlichen Transformation erfahrbar zu machen? Welche Rolle spielt dabei die Sprache, ob gesprochen, geschrieben?</p>
+					</div>
+			
+					<div class="paragraph_container">
+						<!-- <h4 id="panel_one_year">1920</h4> -->
+						<p class="read-more-wrap paragraph_text">
+								<span id="panel_three_show_para">
+										Die Begegnung mit Künstler:innen der Fluxus-Bewegung in Düsseldorf brachte Beuys auf die Idee, seine Ideen zur gesellschaftlichen Transformation in Form von Aktionen zu erkunden. Gleichzeitig erkannte er, dass er mit starken, ungewöhnlichen Bildern und der<span class='dots'>...</span>
+								</span>
+								<div class="more">
+									<span id="panel_three_more_one">
+											Atmosphäre, die er dabei erzeugte, Menschen berühren, provozieren und zum Nachdenken bewegen könne. In seiner frühen Aktion DER CHEF THE CHIEF. 
+											Fluxus Gesang findet sich ein prägnantes Beispiel dieser damals grenzüberschreitenden Bildsprache.
+											<br>
+											<br>
+											Die Aktion fand am 30. August 1964 in einem kleinen Künstlerkreis in Kopenhagen statt und wurde am 1. Dezember 1964 in der Galerie René Block 
+											in Berlin wiederholt. In einem kargen Raum, den Beuys unter anderem mit Fettecken und -streifen, abgeschnittenen Fingernägeln und einem 
+											Haarknäuel präpariert hatte, lag er – neben ihm ein in Filz eingerollter Kupferstab – acht Stunden lang in einer Filzrolle eingewickelt 
+											am Boden. Sein bewegungsloser Körper wurde durch zwei tote Hasen an den beiden Enden der Rolle »verlängert«.
+									</span>
+									<span id="panel_three_more_two">
+											Durch ein Mikrofon verstärkt, das Beuys mit in seinen Filzkokon hineingenommen hatte, hörte man, neben der fortwährenden Wiederholung des für ihn 
+											archetypischen »ö ö«-Lauts, sein Atmen, Husten und Seufzen. Nicht als sprachmächtiger Aufrechtgehender erschien der Künstler, sondern als ein 
+											unfertiges, werdendes Lebewesen, die Sprache zugleich sucht wie erfindet. Mit dieser alles andere als heroischen Darstellung signalisierte Beuys, 
+											dass er eine langsame, offene Transformation im Sinne hatte: eine evolutionäre Revolution.
+											<br>
+											<br>
+											Viele Menschen hatten und haben Schwierigkeiten, die Bildsprache von Beuys zu lesen. In der Rezeption seiner Werke taucht bis heute immer wieder 
+											der Vorwurf auf, er würde mit seinen hermetischen Werken die Betrachter:innen überfordern. An den Gesichtern der Menschen, die in den fotografischen 
+											und filmischen Dokumentationen seiner Aktionen zu sehen sind, kann man erkennen, dass das Staunen oftmals mit Verwirrung einhergeht. 
+											Beuys selbst setzte gerade auf die Produktivität von Geheimnissen.
+									</span>
+								</div>
+						</p>
+					</div>
+				</div> 
+				
+				
+				<div class="link-show-more">
+					<a onclick="showMore(this)" class="moreBtn">Mehr erfahren</a>
+				</div>
+			
+	
+				<div class="footer">
+					<div class="line-footer"></div>
+					<div class="footer_text" id="panel_three_credits">Joseph Beuys, DER CHEF THE CHIEF. Fluxus Gesang, 1964</div>
+					<div class="footer_text">© Bayerische Staatsbibliothek München/STERN-Fotoarchiv/Jürgen Müller-Schneck, VG Bild-Kunst, Bonn 2021</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="triple-page"></div>
+	
+	</div>
+
+	<div id="04_Der_Chef_2" class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div id="05_Schlitten_1" class="empty-page"></div>
+	<div id="05_Schlitten_2" class="empty-page"></div>
+
+	<!-- Text Panel Fourth -->
+	<div id="05_Schlitten_3" class="content">
+			
+		<div class="side">
+				<div class="top">
+
+					<div class="copyright-container">
+						<!-- pop up for copyright -->
+						<button class="copyright-btn" >©</button>
+					
+						<div class="overlay"></div>
+						<div class="modal">
+							<button class="modal-close-btn">x</button>
+							<div id="panel_four_credits">Joseph Beuys, Schlitten, 1969</div>
+							<p class="copyright-text">© bpk / Bayerische Staatsgemäldesammlungen, VG Bild-Kunst, Bonn 2021</p>
+						</div>
+					</div>
+
+
+					<div id="panel_four_main_heading" class="main-heading">Schlitten</div>
+
+					<div class="audio-player">
+
+						<div class="audio-controls">
+
+							<!-- Please do not change the order of the elements because JS relies on it -->
+							<span onclick="rewindThisAudio(this)">
+								<img src="Assets/icons/rewind.svg" alt="" class="control-btn audio-control-previous">
+							</span>
+
+							<span class="seekbar" onclick="playPauseThisAudio(this)">
+								<i class="pause-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M0 0h6v24H0zM12 0h6v24h-6z"/>
+									</svg>
+								</i>
+								<i class="play-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M18 12L0 24V0"/>
+									</svg>
+								</i>
+								<i class="time">0:00</i>
+								<span class="progress"></span>
+								
+							</span>
+
+							<audio class="aud" preload="metadata" 
+							onloadedmetadata="console.log('audio with ' + this.duration.toFixed() + 's')" 
+							onplay="this.parentElement.querySelector('.play-btn').style.display = 'none'; this.parentElement.querySelector('.pause-btn').style.display = 'inline'"
+							onpause="this.parentElement.querySelector('.pause-btn').style.display = 'none';  this.parentElement.querySelector('.play-btn').style.display = 'inline'"
+							ontimeupdate="updateThisAudio(this)" 
+							onended="resetThisAudio(this)">
+							
+								<source src="Assets/Audios/de/04Schlitten.mp3" type="audio/mpeg">
+							</audio>
+
+							<span onclick="forwardThisAudio(this)">
+								<img src="Assets/icons/forward.svg" alt="" class="control-btn audio-control-next"">
+							</span>
+
+						</div>
+
+					</div>
+
+				</div>
+				
+				<div class="line"></div>
+
+				<div class="mobile-content">
+			
+				<div class="content-panel">
+			
+					<div class="subheading">
+							<p id="panel_four_main_subheading">Wie transportiert Beuys seine Ideen? Rettungsgedanke? Überleben? Zeitfrage?</p>
+					</div>
+			
+					<div class="paragraph_container">
+						<!-- <h4 id="panel_one_year">1920</h4> -->
+						<p class="read-more-wrap paragraph_text">
+								<span id="panel_four_show_para">
+										Beuys’ Schlitten zählt zu seinen bekanntesten Multiples. Multiples sind Auflagenobjekte, die Beuys bei den Fluxus-Künstler:innen kennengelernt hatte. 
+										Davon entstanden über 500 Werke in unterschiedlicher Auflagenhöhe. Beuys verstand sie als Vehikel, wie er sie nannte<span class='dots'>...</span> 
+								</span>
+								<div class="more">
+									<span id="panel_four_more_one">
+											da sie die Prinzipien seines erweiterten Kunstbegriffs in die Welt transportierten. Dieser Vehikelcharackter ist besonders deutlich in seinem 
+									Schlitten zu erkennen. Beuys faszinierte hier die ursprüngliche Form der Fortbewegung. Er assoziierte dieses ausschließlich gleitende Transportmittel 
+									mit nomadischen Kulturen. Diese schätzte er für ihre Fähigkeit, sich über allerlei Grenzen hinwegsetzen, sich selbst zu organisieren und sich in 
+									Windeseile umorientieren zu können.
+									<br>
+									<br>
+									Die Umorientierung, die er mit dem Schlitten im Sinn hatte, betrifft insbesondere die sich Ende des 1960er-Jahre bereits anbahnende ökologische Krise. 
+									Die Beweglichkeit im Denken, für die der Schlitten steht, empfand Beuys als überlebensnotwendig, um der Naturzerstörung entgegenzuwirken. Das von Beuys 
+									als Rettungsfahrzeug bezeichnete Objekt, ist mit einer zusammengerollter Filzdecke, einer Taschenlampe und Fettklumpen ausgestattet: »Orientierung, Ernährung,
+									Wärmehaltung, also das, was man im Äußersten, […] auf dem geringsten Lebensniveau braucht, um zu überleben«.* 
+									</span>
+									<span id="panel_four_more_two">
+											Vor allem in Beuys’ Zeichnungen taucht das Motiv des Schlittens wiederholt auf. In frühen Zeichnungen erscheint es häufig als »Urschlitten«. 
+											In einer Zeichnung ersetzte er etwa in einer Kopfform den Unterkiefer durch einen Schlitten. In diesem Sinne wird aus der Verbindung von Kopf 
+											und Schlitten ein Bild der Nahrungsaufnahme und zugleich der Sprachabgabe, also eine geistige Form.
+											<br>
+											<br>
+											Zum ersten Mal tauchte der Schlitten als Objekt 1969 in einer Auflage von 50 Exemplaren auf. Beuys verwendete dabei einen lenkbaren Rennschlitten aus der 
+											DDR. In dem Environment Das Rudel aus demselben Jahr taumeln aus der Heckklappe eines VW-Busses 24 Exemplare. So entsteht ein Gegensatz von modernem 
+											Transporter und dem Schlitten als »primitives« Fortbewegungsmittel, das als »Rettungsschlitten« dem vom Treibstoff abhängigen und in der Konstruktion 
+											anfälligen Auto überlegen ist.
+											<br>
+											<br>
+											* Wulf Herzogenrath im Gespräch mit Joseph Beuys, 19. Januar 1972, in: Selbstdarstellung. Künstler über sich, Düsseldorf 1973, S. 31.
+									</span>
+								</div>
+						</p>
+					</div>
+				</div> 
+				
+				
+				<div class="link-show-more">
+					<a onclick="showMore(this)" id="4" class="moreBtn">Mehr erfahren</a>
+				</div>
+			
+	
+				<div class="footer">
+					<div class="line-footer"></div>
+					<div class="footer_text" id="panel_four_credits">Joseph Beuys, Schlitten, 1969</div>
+					<div class="footer_text">© bpk / Bayerische Staatsgemäldesammlungen, VG Bild-Kunst, Bonn 2021</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="triple-page"></div>
+
+	</div>
+
+	<div id="05_Schlitten_4" class="empty-page"></div>
+	<div id="05_Schlitten_5" class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div id="06_Die_Revolution_Sind_Wir_1" class="empty-page"></div>
+	<div id="06_Die_Revolution_Sind_Wir_2" class="empty-page"></div>
+
+	<!-- Text Panel Fifth -->
+	<div id="06_Die_Revolution_Sind_Wir_3" class="content">
+			
+		<div class="side">
+				<div class="top">
+                   <div class="copyright-container">
+						<!-- pop up for copyright -->
+						<button class="copyright-btn" >©</button>
+
+						<div class="overlay" ></div>
+						<div class="modal" >
+							<button class="modal-close-btn">x</button>
+							<div id="panel_five_credits">Joseph Beuys, La rivoluzione siamo Noi, 1971</div>
+							<p class="copyright-text">Giancarlo Pancaldi, 1972, © bpk / Hamburger Kunsthalle / Elke Walford, VG Bild-Kunst, Bonn 2021</p>
+						</div>
+					</div>
+
+					<div id="panel_five_main_heading" class="main-heading">die revolution sind wir</div>
+
+					<div class="audio-player">
+
+						<div class="audio-controls">
+
+							<!-- Please do not change the order of the elements because JS relies on it -->
+							<span onclick="rewindThisAudio(this)">
+								<img src="Assets/icons/rewind.svg" alt="" class="control-btn audio-control-previous">
+							</span>
+
+							<span class="seekbar" onclick="playPauseThisAudio(this)">
+								<i class="pause-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M0 0h6v24H0zM12 0h6v24h-6z"/>
+									</svg>
+								</i>
+								<i class="play-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M18 12L0 24V0"/>
+									</svg>
+								</i>
+								<i class="time">0:00</i>
+								<span class="progress"></span>
+								
+							</span>
+
+							<audio class="aud" preload="metadata" 
+							onloadedmetadata="console.log('audio with ' + this.duration.toFixed() + 's')" 
+							onplay="this.parentElement.querySelector('.play-btn').style.display = 'none'; this.parentElement.querySelector('.pause-btn').style.display = 'inline'"
+							onpause="this.parentElement.querySelector('.pause-btn').style.display = 'none';  this.parentElement.querySelector('.play-btn').style.display = 'inline'"
+							ontimeupdate="updateThisAudio(this)" 
+							onended="resetThisAudio(this)">
+							
+								<source src="Assets/Audios/de/05DieRevolution.mp3" type="audio/mpeg">
+							</audio>
+
+							<span onclick="forwardThisAudio(this)">
+								<img src="Assets/icons/forward.svg" alt="" class="control-btn audio-control-next">
+							</span>
+
+						</div>
+
+					</div>
+
+				</div>
+				
+				<div class="line"></div>
+
+				<div class="mobile-content">
+			
+				<div class="content-panel">
+			
+					<div class="subheading">
+							<p id="panel_five_main_subheading">Wie wird aus der Vorstellung der Transformation ein Aufruf an alle, sich als Künstler:innen, als Mitgestaltende der Gesellschaft zu begreifen? Worin besteht die Revolution und wer sind »Wir«?</p>
+					</div>
+			
+					<div class="paragraph_container">
+						<!-- <h4 id="panel_one_year">1920</h4> -->
+
+						<p class="read-more-wrap paragraph_text">
+								<span id="panel_five_show_para">
+										Das großformatige Plakat der ersten Ausstellung von Beuys in Italien, 1971 in der Galerie seines Freundes Lucio Amelio in Neapel, zeigt ihn lebensgroß als einen aktiven, handelnden Menschen, 
+							der aus einem Tor auf die Betrachter:innen zuschreitet. Auf diese Fotografie<span class='dots'>...</span>
+								</span>
+								<div class="more">
+									<span id="panel_five_more_one">
+											schreibt Beuys in italienischer Sprache, obwohl nur eine einzige Person zu sehen ist, »La rivoluzione siamo Noi«: Die Revolution sind Wir.
+									<br>
+									<br>
+									Im Sinne seines erweiterten Kunstbegriffs, dessen Motto »Jeder Mensch ist ein Künstler« lautet, spricht Beuys als selbstbewusster Autor der 
+									in diesem Satz zusammengefassten revolutionären Idee zur gesellschaftlichen Erneuerung jeden Menschen an. Das »Noi«, das Wir, meint einen 
+									emanzipatorischen, solidarischen Prozess, in dem der Mensch sich aus seiner »Entfremdung von allem« erlösen und wieder zu einem freien
+									 Wesen werden kann. Das Wir bedeutet zunächst nichts weiter, als dass eine revolutionäre Umgestaltung der Gesellschaft einer gemeinsamen Aktion bedarf. 
+									 Lapidar stellt dieser Satz fest, revolutionäre Veränderungen können nur von einer Gemeinschaft getragen werden.
+									 <br>
+									 <br>
+									 Beuys erscheint im Habitus eines revolutionären Studenten. Der Ort der Aufnahme, die italienische Insel Capri, 
+									 erinnert sowohl an Goethes Italienreise, an das Reisen als Bildungsvorgang überhaupt als auch an marxistisch beeinflusste 
+									 Revolutionäre wie Lenin, Brecht oder Walter Benjamin, die zeitweise auf Capri gelebt haben. Über das marxistische Denken aber, 
+									 nach dem die materiellen Bedingungen das Bewusstsein prägten und erst ihre Veränderung zur Freiheit führe, stellt Beuys den a 
+									 priori freien, kreativen Menschen. 
+									</span>
+									<span id="panel_five_more_two">
+											Nach seinen Vorstellungen autorisiert sich der zukünftige Künstlerrevolutionär durch einen stetigen Austausch, eine »permanente 
+									Konferenz«, die zugleich eine freie Universität auszeichne. Beuys war nämlich klar, dass die radikale Teilhabe, die eine Demokratie erfordert, 
+									nur möglich ist, wenn sich alle bilden und am öffentlichen Gespräch beteiligen: Erfahrungswissen über die Gesamtzusammenhänge des Seins bilden die 
+									Voraussetzung für demokratisches Handeln.
+									<br>
+									<br>
+									Beuys zeigt sich auf dem Plakat als Nomade, als ein Erkunder, der das transitorische Wesen des Menschen repräsentiert und auf dem Weg ist, das Wir 
+									als eine universelle Konstellation zu befragen. Der Erscheinungsraum und der Bewegungsradius des aus der Kunst kommenden Revolutionärs beziehen 
+									sich auf die Natur, auf die Tiere und Pflanzen, auf die physischen und metaphysischen Verhältnisse. Die Idee vom Menschen umfasst bei Beuys den 
+									gesamten Planeten.",
+									</span>
+
+									<div class="link_ext">
+											<a class="external_link" target="_blank" href="https://www.youtube.com/watch?v=IdOokXS7x-o" id="panel_five_external_link_one">Link</a>
+											<a class="external_link" target="_blank" href="https://www.youtube.com/watch?v=gbBjLK8LZSM&list=PLO7XxrnVa5zZgsGe3qjc6tXWk1aNMrJp4&index=9" id="panel_five_external_link_two">Link</a>
+									</div>
+								</div>
+						</p>
+					</div>
+				</div> 
+				
+				
+				<div class="link-show-more">
+					<a onclick="showMore(this)" id="5" class="moreBtn">Mehr erfahren</a>
+				</div>
+			
+	
+				<div class="footer">
+					<div class="line-footer"></div>
+					<div class="footer_text" id="panel_five_credits">Joseph Beuys, La rivoluzione siamo Noi, 1971</div>
+					<div class="footer_text">Giancarlo Pancaldi, 1972, © bpk / Hamburger Kunsthalle / Elke Walford, VG Bild-Kunst, Bonn 2021</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="triple-page"></div>
+
+	</div>
+
+	<div id="06_Die_Revolution_Sind_Wir_4" class="empty-page"></div>
+	<div id="06_Die_Revolution_Sind_Wir_5" class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div id="07_Das_Kapital_Raum_1" class="empty-page"></div>
+	<div id="07_Das_Kapital_Raum_2" class="empty-page"></div>
+	
+	<!-- Text Panel Sixth -->
+	<div id="07_Das_Kapital_Raum_3" class="content">
+			
+		<div class="side">
+				<div class="top">
+					<div class="copyright-container">
+						<!-- pop up for copyright -->
+						<button class="copyright-btn" >©</button>
+
+						<div class="overlay" ></div>
+						<div class="modal" >
+							<button class="modal-close-btn">x</button>
+							<div id="panel_six_credits">Joseph Beuys, Das Kapital Raum 1970–1977, 1980</div>
+							<p class="copyright-text">© Keystone, VG Bild-Kunst, Bonn 2021</p>
+						</div>
+					</div>
+
+					<div id="panel_six_main_heading" class="main-heading">kapital raum</div>
+
+					<div class="audio-player">
+
+						<div class="audio-controls">
+
+							<!-- Please do not change the order of the elements because JS relies on it -->
+							<span onclick="rewindThisAudio(this)">
+								<img src="Assets/icons/rewind.svg" alt="" class="control-btn audio-control-previous">
+							</span>
+
+							<span class="seekbar" onclick="playPauseThisAudio(this)">
+								<i class="pause-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M0 0h6v24H0zM12 0h6v24h-6z"/>
+									</svg>
+								</i>
+								<i class="play-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M18 12L0 24V0"/>
+									</svg>
+								</i>
+								<i class="time">0:00</i>
+								<span class="progress"></span>
+								
+							</span>
+
+							<audio class="aud" preload="metadata" 
+							onloadedmetadata="console.log('audio with ' + this.duration.toFixed() + 's')" 
+							onplay="this.parentElement.querySelector('.play-btn').style.display = 'none'; this.parentElement.querySelector('.pause-btn').style.display = 'inline'"
+							onpause="this.parentElement.querySelector('.pause-btn').style.display = 'none';  this.parentElement.querySelector('.play-btn').style.display = 'inline'"
+							ontimeupdate="updateThisAudio(this)" 
+							onended="resetThisAudio(this)">
+							
+								<source src="Assets/Audios/de/06KapitalRaum.mp3" type="audio/mpeg">
+							</audio>
+
+							<span onclick="forwardThisAudio(this)">
+								<img src="Assets/icons/forward.svg" alt="" class="control-btn audio-control-next"">
+							</span>
+
+						</div>
+
+					</div>
+
+				</div>
+				
+				<div class="line"></div>
+
+				<div class="mobile-content">
+			
+				<div class="content-panel">
+			
+					<div class="subheading">
+							<p id="panel_six_main_subheading">Wie fasst Beuys seine zentralen Ideen und Aktionen zu Freiheit, Wirtschaft, Demokratie und Ökologie in diesem Environment zusammen? Wie ist dieser Raum zu lesen, zu erfahren?</p>
+					</div>
+			
+					<div class="paragraph_container">
+							<p class="read-more-wrap paragraph_text">
+									<span id="panel_six_show_para">
+											Für die Ausstellung L’arte degli anni ’70s auf der Biennale in Venedig 1980 gestaltete Beuys ein Ensemble, das er als DAS KAPITAL RAUM 1970–1977 bezeichnete. Es setzte sich zusammen aus Mediengeräten wie 
+											Filmprojektoren, Mikrofon und Tonbandgeräten, aus 50<span class='dots'>...</span>
+									</span>
+									<div class="more">
+										<span id="panel_six_more_one">
+												Tafeln mit Kreidezeichnungen und einer Vielzahl von Objekten und Gegenständen, wie etwa einem Konzertflügel, die aus seinen Aktionen 
+									und Projekten im Zeitraum von 1970 bis 1977 stammten – so aus Celtic (Kinloch Rannoch) (1970), Celtic + ~~~(1971) – oder Tafeln, die er 
+									im Zusammenhang mit der Organisation für direkte Demokratie durch Volksabstimmung auf der documenta 5 und mit der Free International 
+									University (F.I.U.) auf der documenta 6 erstellt hatte.
+									<br>
+									<br>
+									Beuys verwies mit den Einzelobjekten auf Aktionen, die auch weitere 
+									frühere Arbeiten ins Spiel brachten. Das gilt zum Beispiel für die Aktion ö ö Programm von 1967 in Celtic + ~~~, die für sein Schaffen 
+									in den 1970er-Jahren wichtig war und für seinen Begriff des Kapitals, der bei ihm, anders als bei Marx, gleichzusetzen ist mit der 
+									gesamten menschlichen Kreativität. Nicht zuletzt hatte Beuys bei der Aufstellung der Arbeit 1981 in Zürich bemerkt, dass der Titel 
+									auch »Wie man das Kapital aus den Angeln hebt« lauten könnte.
+									<br>
+									<br>
+									Das Environment wirkt wie eine Bühne, auf dem das zu spielende Stück angehalten wurde bzw. die Schauspieler:innen die Szene verlassen 
+									haben. Die Szenerie ist zu einem Monument geworden, einem Erinnerungsstück an ein vergangenes Geschehen. Als Betrachter:innen 
+									sind wir aufgerufen, die Aktion anhand der Relikte geistig zu rekonstruieren und an anderer Stelle mit anderen Akteur:innen fortzusetzen.
+									<br>
+									<br>
+									Beuys hat den Bühnenraum in zwei Ebenen unterteilt, der rückwärtige Prospekt zeigt beschriebene Tafeln, die sowohl wirtschaftliche als 
+									auch juristische und politische Fragen behandeln, also einen seminaristischen Raum evozieren. Wie eine Kaskade stürzen diese Tafeln 
+									auf den Bühnenboden und steigen gleichzeitig auf.
+									<br>
+									<br>
+									Die auf ihnen verhandelten Ideen suchen den Kontakt zur Wirklichkeit und 
+									erheben sich gleichzeitig als Vision in zukünftiger Gestalt. Vor diesen Tafeln sind die Utensilien einer Aktion versammelt, die Beuys 
+									1970 in Edinburgh und in Basel mehrfach aufgeführt hat. In dieser Aktion unter dem Titel Celtic spielen keltisch-christliche Motive 
+									und spirituelle Ideen eine zentrale Rolle.
+										</span>
+										<span id="panel_six_more_two">
+												Den rationalen Überlegungen über eine demokratische Gesellschaftsordnung, alternative Wirtschaftsformen etc. werden Gegenstände aus einem Mysterienspiel, 
+									einer Aktion, die mit der Fußwaschung beginnt und einer Taufe endet, als komplementäre Ergänzung hinzugefügt.
+									<br>
+									<br>
+									Die von Beuys geforderte Erweiterung eines bloß rational bleibenden, materialistischen Denkens findet in den geheimnisvollen, sich der unmittelbaren 
+									Entschlüsselung entziehenden Gegenständen und deren Beziehungen in Raum und Zeit ein eindrückliches Bild.
+										</span>
+									</div>
+							</p>
+					</div>
+				</div> 
+				
+				
+				<div class="link-show-more">
+					<a onclick="showMore(this)" id="6" class="moreBtn">Mehr erfahren</a>
+				</div>
+			
+	
+				<div class="footer">
+					<div class="line-footer"></div>
+					<div class="footer_text" id="panel_six_credits">Joseph Beuys, Das Kapital Raum 1970–1977, 1980</div>
+					<div class="footer_text">© Keystone, VG Bild-Kunst, Bonn 2021</div>
+				</div>
+
+			</div>
+
+
+		</div>
+
+		<div class="double-page"></div>
+
+	</div>
+
+	<div id="07_Das_Kapital_Raum_4" class="empty-page"></div>
+	<div id="07_Das_Kapital_Raum_5" class="empty-page"></div>
+
+	<div class="empty-page"></div>
+	
+	<!-- Text Panel Seventh -->
+	<div id="08_7000_Eichen_1" class="content">
+			
+		<div class="side">
+				<div class="top">
+					<div class="copyright-container">
+						<!-- pop up for copyright -->
+						<button class="copyright-btn" >©</button>
+
+						<div class="overlay" ></div>
+						<div class="modal" >
+							<button class="modal-close-btn">x</button>
+							<div id="panel_seven_credits">Joseph Beuys, 7000 Eichen – Stadtverwaldung statt Stattverwaltung, 1982</div>
+							<p class="copyright-text">Christiane Zschetzschingck, 16. März 1982 © picture-alliance / dpa | Zschetzschingck, VG Bild-Kunst, Bonn 2021</p>
+						</div>
+					</div>
+
+					<div id="panel_seven_main_heading" class="main-heading">7000 eichen</div>
+
+					<div class="audio-player">
+
+						<div class="audio-controls">
+
+							<!-- Please do not change the order of the elements because JS relies on it -->
+							<span onclick="rewindThisAudio(this)">
+								<img src="Assets/icons/rewind.svg" alt="" class="control-btn audio-control-previous">
+							</span>
+
+							<span class="seekbar" onclick="playPauseThisAudio(this)">
+								<i class="pause-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M0 0h6v24H0zM12 0h6v24h-6z"/>
+									</svg>
+								</i>
+								<i class="play-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M18 12L0 24V0"/>
+									</svg>
+								</i>
+								<i class="time">0:00</i>
+								<span class="progress"></span>
+								
+							</span>
+
+							<audio class="aud" preload="metadata" 
+							onloadedmetadata="console.log('audio with ' + this.duration.toFixed() + 's')" 
+							onplay="this.parentElement.querySelector('.play-btn').style.display = 'none'; this.parentElement.querySelector('.pause-btn').style.display = 'inline'"
+							onpause="this.parentElement.querySelector('.pause-btn').style.display = 'none';  this.parentElement.querySelector('.play-btn').style.display = 'inline'"
+							ontimeupdate="updateThisAudio(this)" 
+							onended="resetThisAudio(this)">
+							
+								<source src="Assets/Audios/de/077000Eichen.mp3" type="audio/mpeg">
+							</audio>
+
+							<span onclick="forwardThisAudio(this)">
+								<img src="Assets/icons/forward.svg" alt="" class="control-btn audio-control-next"">
+							</span>
+
+						</div>
+
+					</div>
+
+				</div>
+				
+				<div class="line"></div>
+
+				<div class="mobile-content">
+			
+				<div class="content-panel">
+			
+					<div class="subheading">
+							<p id="panel_seven_main_subheading">Warum entscheidet sich Beuys, mit dem Werk 7000 Eichen das Museum ganz zu verlassen? Inwiefern geht mit diesem Projekt Beuys’ Vorstellung der »Sozialen Plastik« in Erfüllung? Weshalb bleibt dieses Werk bei so vielen am stärksten in Erinnerung?</p>
+					</div>
+			
+					<div class="paragraph_container">
+						<p class="paragraph_text" id="panel_seven_show_para">
+							7000 Eichen war Beuys’ letzter und aufwendigster Beitrag zur documenta in Kassel. Auf der documenta 7 (1982) ließ er 7000 Basaltstelen aus unterschiedlichen Steinbrüchen herbeischaffen und sie vor dem Hauptgebäude, dem Museum Fridericianum, zu einem<span class='dots'>...</span> 
+								
+							<div class="more">
+								<p id="panel_seven_more_one">
+									keilförmigen Berg aufschichten. Die Stelen sollten zusammen mit jeweils einer Eiche (oder einer anderen Baumart) im Stadtraum Kassel ausgepflanzt werden.
+									Ein extra dafür gegründetes Organisationsbüro leitete und überwachte die Pflanzungen, deren Kosten pro Baum 500 DM betrugen. Der letzte Baum wurde zur 
+									Eröffnung der documenta 8 am 12. Juni 1987, also erst nach dem Tod von Beuys, gepflanzt.
+									<br>
+									<br>
+									Mit dieser Sozialen Skulptur verließ Beuys endgültig den konventionellen Kunstraum. Der Stein verkörperte in seiner kristallinen, »ewigen« Materialität 
+									nicht nur das starre Element, den Tod, sondern auch die Dimension der Zeit, die dem Wachsenden, Organischen des Baumes an die Seite gestellt ist.
+									<br>
+									<br>
+									Enttäuscht von den parteistrategischen Kompromissen der GRÜNEN, ging Beuys 1982 mit seiner sozialökologischen Großskulptur zur unmittelbaren Aktion
+									 über und versuchte neben Kassel auch in Hamburg, die Renaturalisierung eines Spülfeldes als Kunstaktion durchzusetzen.
+								   Die ökologische Frage stand verstärkt im Zentrum seines Handelns.  
+								</p>
+								<p id="panel_seven_more_two">
+									Aus den 7000 Eichen sind zwei wichtige Werke entstanden, die den Titel Das Ende des 20. Jahrhunderts tragen. Sie verdeutlichen, 
+									dass bis zum Ende des Jahrhunderts entscheidende Weichen gestellt werden müssen, um die Naturzerstörung aufzuhalten. In der 
+									Fassung, die heute im Hamburger Bahnhof in Berlin zu sehen ist – 21 auf Holzpaletten gelagerte Basaltstelen mit einem Hubwagen als 
+									Transportmittel –, zeigt Beuys den in die Evolution eingreifenden Menschen des Anthropozäns.
+									<br>
+									<br>
+									Der ökologische Abdruck menschlichen Handels zeigt sich bisher nur in den Zerstörungen, Klimaverschiebungen, 
+									in der Nachhaltigkeitskrise. Beuys sieht jedoch Möglichkeiten und die absolute Notwendigkeit, die destruktiven Spuren des Menschen auf diesem Planeten ins Positive zu verändern.
+								</p>
+							</div>
+						</p>
+					</div>
+				</div> 
+				
+				
+				<div class="link-show-more">
+					<a onclick="showMore(this)" id="7" class="moreBtn">Mehr erfahren</a>
+				</div>
+			
+	
+				<div class="footer">
+					<div class="line-footer"></div>
+					<div class="footer_text" id="panel_seven_credits">Joseph Beuys, 7000 Eichen – Stadtverwaldung statt Stattverwaltung, 1982</div>
+					<div class="footer_text">Christiane Zschetzschingck, 16. März 1982 © picture-alliance / dpa | Zschetzschingck, VG Bild-Kunst, Bonn 2021</div>
+				</div>
+
+			</div>
+
+
+		</div>
+
+		<div class="triple-page"></div>
+
+	</div>
+
+	<div id="08_7000_Eichen_2" class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div id="09_Capri_Batterie_1" class="empty-page"></div>
+	<div id="09_Capri_Batterie_2" class="empty-page"></div>
+	
+	<!-- Text Panel Eight -->
+	<div id="09_Capri_Batterie_3" class="content">
+			
+		<div class="side">
+				<div class="top">
+					<div class="copyright-container">
+						<!-- pop up for copyright -->
+						<button class="copyright-btn" >©</button>
+
+						<div class="overlay" ></div>
+						<div class="modal" >
+							<button class="modal-close-btn">x</button>
+							<div id="panel_eight_credits">Joseph Beuys, Capri-Batterie, 1985</div>
+							<p class="copyright-text">Photo: Reni Hansen, © Kunstmuseum Bonn, VG Bild-Kunst, Bonn 2021</p>
+						</div>
+					</div>
+
+					<div id="panel_eight_main_heading" class="main-heading">capri-batterie</div>
+
+					<div class="audio-player">
+
+						<div class="audio-controls">
+
+							<!-- Please do not change the order of the elements because JS relies on it -->
+							<span onclick="rewindThisAudio(this)">
+								<img src="Assets/icons/rewind.svg" alt="" class="control-btn audio-control-previous">
+							</span>
+
+							<span class="seekbar" onclick="playPauseThisAudio(this)">
+								<i class="pause-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M0 0h6v24H0zM12 0h6v24h-6z"/>
+									</svg>
+								</i>
+								<i class="play-btn" style="display:none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+										<path fill="#000000" fill-rule="evenodd" d="M18 12L0 24V0"/>
+									</svg>
+								</i>
+								<i class="time">0:00</i>
+								<span class="progress"></span>
+								
+							</span>
+
+							<audio class="aud" preload="metadata" 
+							onloadedmetadata="console.log('audio with ' + this.duration.toFixed() + 's')" 
+							onplay="this.parentElement.querySelector('.play-btn').style.display = 'none'; this.parentElement.querySelector('.pause-btn').style.display = 'inline'"
+							onpause="this.parentElement.querySelector('.pause-btn').style.display = 'none';  this.parentElement.querySelector('.play-btn').style.display = 'inline'"
+							ontimeupdate="updateThisAudio(this)" 
+							onended="resetThisAudio(this)">
+							
+								<source src="Assets/Audios/de/08Capri-Batterie.mp3" type="audio/mpeg">
+							</audio>
+
+							<span onclick="forwardThisAudio(this)">
+								<img src="Assets/icons/forward.svg" alt="" class="control-btn audio-control-next"">
+							</span>
+
+						</div>
+
+					</div>
+
+				</div>
+				
+				<div class="line"></div>
+
+				<div class="mobile-content">
+			
+				<div class="content-panel">
+			
+					<div class="subheading">
+							<p id="panel_eight_main_subheading">Wie ist dieses letzte Werk von Beuys zu deuten? Inwiefern zeigt sich darin sein Gesamtwerk? Wenn die Batterie als Erbe zu verstehen ist, um welches Erbe handelt es sich dann?</p>
+					</div>
+			
+					<div class="paragraph_container">
+						<p class="paragraph_text" id="panel_eight_show_para">
+								In mehreren Zeichnungen und Skizzen von Joseph Beuys taucht der Begriff »Sonnenstaat« auf. In Anlehnung an die 1602 im Gefängnis entworfene utopische Schrift des italienischen Dominikanermönchs Tommaso Campanella Civitas solis stellte Beuys die Kraft und Wärme<span class='dots'>...</span>
+							    
+							 
+								
+							<div class="more">
+								<p id="panel_eight_more_one">
+									der Sonne – die »evolutionäre Grundsubstanz« – in den Mittelpunkt seiner Vision einer neuen Gesellschaft. Auch wenn sie an Campanellas Skepsis gegenüber der aristotelischen Naturphilosophie anknüpft, 
+									unterscheidet sich Beuys’ Ziel einer selbstbestimmten demokratischen Gesellschaft wesentlich von Campanellas Vision einer theokratischen Gesellschaft.
+									<br>
+									<br>
+									Die Capri-Batterie entstand 1985 auf Capri, unweit von Neapel, in dessen Kerker die Inquisition Campanella verbannt hatte. In diesem an physikalische 
+									Sonnenmodelle erinnernden Werk veranschaulicht Beuys mit einfachen Mitteln den Prozess einer langsamen Transformation »aus dem Inneren heraus«, 
+									der seiner Sozialutopie zugrunde liegt. Die Capri-Batterie zählt zu den letzten Werken von Beuys. In ihr formulierte er sein geistiges und im erweiterten 
+									Sinne auch sein politisches Testament. Er hat sie während seiner Arbeit an dem Environment Palazzo regale im Museo di Capodimonte in Neapel geschaffen. 
+									Auf Capri verbrachte Beuys sein letztes Weihnachtsfest.
+									<br>
+									<br>
+									In dem kleinen Auflagenobjekt sind Beuys’ Grundideen nochmals zusammengefasst. Das technische Gerät, Stecker und Glühbirne verkörpern 
+									die menschliche Kultur, die Fähigkeiten und die Erfindungskraft des Menschen als denkendes Wesen. 
+									Die Zitrone repräsentiert die Natur, in der magische Gesellschaften noch eine beseelte, von Geistern beherrschte 
+									Macht erkannten bzw. erkennen, während sie in der modernen Welt zerstört wird und zum bloßen materiellen 
+									Nachschublieferant degradiert scheint.
+									<br>
+									<br>
+									Mit der Zerstörung der Natur und der wahrnehmbaren Verschiebung des ökologischen Gleichgewichts beginnt das Anthropozän, 
+									das die biologische Evolution beendet. Beuys verdeutlicht, dass die Natur – in dem Objekt versorgt die Zitrone die Glühbirne mit Strom – 
+									den Menschen am Leben erhält und nur ein nachhaltiges Bündnis die Zukunft zu sichern vermag. Als einer der Gründer:innen der GRÜNEN hat Beuys 
+									bereits in den 1970er-Jahren die ökologische Frage diskutiert.
+									<br>
+									<br>
+									Die Glühbirne, die sowohl auf die Erleuchtung als auch auf die Elektrizität verweist, assoziierte Beuys mit Jesus Christus. 
+									Auf einem kleinen Votivbild, einem italienischen Herzjesubild hat Beuys den Satz »Jesus Christus ist der Erfinder der Elektrizität« 
+									geschrieben. Erst Christus hat für Beuys das Individuum, das Ich und das analytische Denken und in der Folge die Wissenschaft ermöglicht. 
+									Insofern ist die gelbe Glühbirne auch ein Zeichen des spirituellen Lichts, des Christus als Lichtgestalt, der vom Gott des Lichts Apollon 
+									und ebenso vom ägyptischen Pharao Echnaton und seinem Sonnengott Aton herkommt.
+								</p>
+								<p id="panel_eight_more_two">
+										In der Capri-Batterie erkennt man Beuys’ Versuch, den »Sonnenstaat« plastisch zu erweitern: Eine das Licht der Sonne evozierende 
+										Glühbirne koppelte er mit einer die Energie der Sonne verkörpernden Zitrone, die, ganz wie im Physikunterricht in der 
+										Schule, zu einer Obstbatterie wird. Damit wandelte er Campanellas Modell in ein sich kontinuierlich veränderndes, 
+										auf ewig – oder zumindest auf lange Sicht – Werdendes.
+										<br>
+										<br>
+										Somit bewahrte Beuys die Utopie vor dem Abrutschen in die Dystopie. Überhaupt zeugt die Entscheidung, lediglich Transformationsimpulse 
+										und -prozesse zu inszenieren, ohne jemals ein konkretes Ziel oder Ergebnis vor Augen zu führen, davon, dass das utopische 
+										Moment für Beuys in der Veränderung selbst lag. Diese Botschaft – das zeigt das ungebrochen Streitbare seiner 
+										Ideen wie seiner Person – ist nur bedingt in unserer Gegenwart angekommen.
+								</p>
+								<div class="link_ext">
+									<a class="external_link" target="_blank" target="_blank" href="https://www.youtube.com/watch?v=vBzVsdpdOxA&list=PLO7XxrnVa5zZgsGe3qjc6tXWk1aNMrJp4&index=8" id="panel_eight_external_link">Link</a>
+								</div>
+							</div>
+						</p>
+					</div>
+				</div> 
+				
+				
+				<div class="link-show-more">
+					<a onclick="showMore(this)" id="8" class="moreBtn">Mehr erfahren</a>
+				</div>
+			
+	
+				<div class="footer">
+					<div class="line-footer"></div>
+					<div class="footer_text" id="panel_eight_credits">Joseph Beuys, Capri-Batterie, 1985</div>
+					<div class="footer_text">Photo: Reni Hansen, © Kunstmuseum Bonn, VG Bild-Kunst, Bonn 2021</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="page"></div>
+
+	</div>
+
+	<div id="09_Capri_Batterie_4" class="empty-page"></div>
+	<div id="09_Capri_Batterie_5" class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div class="empty-page"></div>
+
+	<div id="10_Credits_1" class="credits-overlay">
+			<!-- Title page -->
+			<div id="credits-page-one" class="credits-page-one">
+
+				<div class="credits-heading">
+					<!-- <span class="text" id="cover_goethe_text">przedstawia</span> -->
+					<span class="heading">CREDITS</span>
+					<img src="Assets/goethe-logo.png">
+				</div>
+
+				<ul class="list">
+					<li class="first-child">Projektleitung</li>
+					<li>Renata Prokurat, Warschau</li>
+					<li>Luisa Rath, Prag</li>
+				</ul>
+
+				<img class="beuys" src="Assets/beuys2021-logo.png">
+
+				<ul class="list">
+					<li class="first-child">Kuratoren</li>
+					<li>Eugen Blume</li>
+					<li>Catherine Nichols</li>
+				</ul>
+
+				<a target="_blank" href="https://zaubar.com/" ><img class="zaubar" src="Assets/zaubar-logo.png"></a> 
+
+				<ul class="list">
+					<li class="first-child">Producer</li>
+					<li>Fabian Mrongowius</li>
+				</ul>
+
+				<ul class="list">
+					<li class="first-child">Executive Producers</li>
+					<li>Stefan Marx</li>
+					<li>Anne-Sophie Panzer</li>
+				</ul>
+
+				<ul class="list">
+					<li class="first-child">Design</li>
+					<li>Erika Bosch Ramirez</li>
+					<li>Rakesh Patil</li>
+					<li>Tarkan Turan</li>
+					<li>Sebastian Göttert</li>
+				</ul>
+
+				<ul class="list">
+					<li class="first-child">Web Development</li>
+					<li>Marius Kircher</li>
+					<li>Rekesh Raj Pandey</li>
+					<li>Stefan Dachwitz</li>
+					<li>Stefan Bethge</li>
+					<li>Tobias Nilsson</li>
+				</ul>
+
+				<ul class="list">
+					<li>Seejan JB Rana</li>
+					<li>Niroj Shrestha</li>
+					<li>Binay Shrestha</li>
+					<li>Anish Rana</li>
+					<li>Ruchina Tamrakar</li>
+					<li>Rajiv Gurung</li>
+				</ul>
+
+				<ul class="list">
+					<li class="first-child">Voice Over & Translation</li>
+					<li>Johannes Brandrup</li>
+					<li>Laimonas Kinčius</li>
+					<li>Aldona Vilutytė</li>
+					<li>Ireneusz Machnicki</li>
+					<li>Malgorzata Behlert</li>
+					<li>...</li>
+				</ul>
+
+				<ul class="list">
+					<li class="first-child">Kontakt:</li>
+					<li>Fabian Mrongowius, ZAUBAR</li>
+					<li><a href="mailto:hello@zaubar.com">hello@zaubar.com</a></li>
+				</ul>
+
+				<ul class="list">
+					<li>Renata Prokurat, Goethe-Institut Warschau</li>
+					<li><a href="mailto:Renata.Prokurat@goethe.de">Renata.Prokurat@goethe.de</a></li>
+				</ul>
+
+				<ul class="list">
+					<li>Kathrin Luz, Beuys2021</li>
+					<li><a href="mailto:kl@luz-communication.de">kl@luz-communication.de</a></li>
+				</ul>
+
+				<ul class="list">
+					<li class="first-child">IMPRESSUM</li>
+					<li>Goethe-Institut e. V.</li>
+					<li>Oskar-von-Miller-Ring 18</li>
+					<li>80333 München</li>
+					<li><a href="https://www.goethe.de/de/index.html">www.goethe.de</a></li>
+				</ul>
+
+				<div class="zaubar-team">
+					    <p>Want your own virtual tour?</p>
+						<a target="_blank" href="https://zaubar.com/" class="button">Speak to the ZAUBAR TEAM</a>
+				</div>
+				
+			</div>
+
+
+	
+	</div>
+
+	<!-- Credits -->
+	<div class="cover-container-credits">
+			<div class="cover-background-credits">
+				<!-- <img src="SVG/background.svg" alt=""> -->
+			</div>
+			<div class="main-bar"></div>
+	</div>
+
+
+	
+
+</div>
+
+
+
+<!-- Goethe Institute tracking -->
+
+<!-- Webtrekk 4, (c) www.webtrekk.de -->
+<script src="//www.goethe.de/skripte/webtrekk_v4.min.js" type="text/javascript"></script>
+<script src="//www.goethe.de/skripte/webtrekk-conf_contens.v2.js" type="text/javascript"></script>
+<script type="text/javascript">if(typeof(wt.sendinfo) != "undefined")wt.sendinfo();</script>
+<noscript>
+<div><img src="//goetheinstitut01.webtrekk.net/382202390743064/wt.pl?p=212,&ov=&cr=&oi=&ba=&co=&qn=&ca=&pi=&st=&cd=&cg=" height="1" width="1" alt="" /></div>
+</noscript>
+<!-- /Webtrekk -->
+
+</body>
+</html>

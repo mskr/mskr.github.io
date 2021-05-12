@@ -1,0 +1,111 @@
+<html>
+<head>
+<title>Beuys</title>
+<style>
+	body { margin: 0; width: 100%; height: 100%; }
+	* { box-sizing: border-box; }
+	.screenfilling { width: 100%; height: 100%; }
+	.background { background: top / cover no-repeat url("SVG/background.svg"), #EAE8DD; }
+	.absolute { position: absolute; }
+	.relative { position: relative; }
+	.top { top: 0; }
+	.right { right: 0; }
+	.bottom { bottom: 0; }
+	.padding2 { padding: 2rem; }
+	.paddingleft6percent { padding-left: 6%; }
+	.margin2 { margin: 2rem; }
+	.margintop10percent { margin-top: 10%; }
+	.marginleft10percent { margin-left: 10%; }
+	.width100 { width: 100%; }
+	.maxwidth100 { max-width: 100rem; }
+	.flex { display: flex; flex-direction: row; }
+	.centerhorizontal { justify-content: center; }
+	.centervertical { align-items: center; }
+	.spacebetween { justify-content: space-between; }
+	.wrap { flex-wrap: wrap; }
+</style>
+</head>
+
+<!-- 
+
+Layering:
+
+https://stackoverflow.com/questions/17786618/how-to-use-z-index-in-svg-elements
+
+
+Preserve aspect ratio:
+
+https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/preserveAspectRatio
+
+
+SVG reference:
+
+https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute
+
+
+SVG positioning guide:
+
+https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Positions
+ -->
+
+<body>
+
+<div class="screenfilling background" >
+
+<div>
+
+	<object data="SVG/languageselect.svg" type="image/svg+xml"
+		class="absolute top right padding2">
+		<img src="fallback.jpg" />
+	</object>
+
+	<object data="SVG/goethe.svg" type="image/svg+xml"
+		class="margintop10percent marginleft10percent">
+		<img src="yourfallback.jpg" />
+	</object>
+
+</div>
+
+<div>
+
+	<object data="SVG/tagline.svg" type="image/svg+xml"
+		class="width100 maxwidth100 padding2 paddingleft6percent">
+		<img src="yourfallback.jpg" />
+	</object>
+
+</div>
+
+<div class="flex spacebetween wrap width100 padding2">
+
+	<object data="SVG/beuys2021.svg" type="image/svg+xml">
+		<img src="yourfallback.jpg" />
+	</object>
+
+	<object data="SVG/zaubar.svg" type="image/svg+xml">
+		<img src="yourfallback.jpg" />
+	</object>
+
+	<object data="SVG/appstores.svg" type="image/svg+xml">
+		<img src="yourfallback.jpg" />
+	</object>
+
+</div>
+
+<div class="flex centerhorizontal">
+
+	<object data="SVG/arrow.svg" type="image/svg+xml">
+		<img src="yourfallback.jpg" />
+	</object>
+
+</div>
+
+<!-- <svg
+	viewBox="0 0 100 100" preserveAspectRatio="xMidYMin meet"
+	style="width:100%; height:100%;">
+	<image href="SVG/background.svg" class="" preserveAspectRatio="xMidYMin meet" />
+</svg> -->
+
+</div>
+
+</body>
+</html>

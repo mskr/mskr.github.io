@@ -1,0 +1,22 @@
+{
+  "name": "scrollytelling",
+  "version": "1.0.0",
+  "description": "",
+  "main": "start.js",
+  "scripts": {
+    "start": "node start.js",
+    "test": "npm test.js",
+    "scss": "npx sass ./App/index.scss ./App/index.css --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "live-server": "^1.2.1",
+    "sass": "^1.32.11",
+    "three": "^0.127.0"
+  },
+  "devDependencies": {
+    "glob": "^7.1.7",
+    "imagemagick-cli": "^0.5.0"
+  }
+}
